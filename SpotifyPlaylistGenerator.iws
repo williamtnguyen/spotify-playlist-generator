@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="80a85d7c-1d29-42c9-acfd-8dc72417a9c3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Playlist.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/PlaylistGenerator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ProgramManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Song.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SpotifyPlaylistGenerator.ipr" beforeDir="false" afterPath="$PROJECT_DIR$/SpotifyPlaylistGenerator.ipr" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SpotifyPlaylistGenerator.iws" beforeDir="false" afterPath="$PROJECT_DIR$/SpotifyPlaylistGenerator.iws" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
