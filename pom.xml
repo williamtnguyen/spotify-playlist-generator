@@ -8,5 +8,12 @@
     <artifactId>spotify-playlist-generator</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <!-- https://mvnrepository.com/artifact/se.michaelthelin.spotify/spotify-web-api-java -->
+    <dependency>
+        <groupId>se.michaelthelin.spotify</groupId>
+        <artifactId>spotify-web-api-java</artifactId>
+        <version>4.0.2</version>
+    </dependency>
+
 
 </project>
