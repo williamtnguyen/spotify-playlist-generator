@@ -19,6 +19,7 @@
     <groupId>CS151.spotify.playlist_generator</groupId>
     <artifactId>spotify-playlist-generator</artifactId>
     <version>1.0-SNAPSHOT</version>
+
     <!-- https://mvnrepository.com/artifact/se.michaelthelin.spotify/spotify-web-api-java -->
     <dependencies>
         <dependency>
