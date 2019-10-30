@@ -24,14 +24,17 @@ public class TestAPI {
     private static AuthorizationCodeRefreshRequest authorizationCodeRefreshRequest;
 
     public static void main(String[] args) throws IOException, SpotifyWebApiException, InterruptedException {
+        // Local vars necessary for authentication
         clientID = "f51f4ef2d861469195f1647d33cf7331";
         clientSecret = "0e4eeb82d1304dadb7de85073c8b4dab";
         redirectUri = SpotifyHttpManager.makeUri("https://www.google.com/");
 
+        // SpotifyApi object requires the local vars to be set as its properties to grant authorization
         spotifyapi = new SpotifyApi.Builder().setClientId(clientID).setClientSecret(clientSecret).setRedirectUri(redirectUri).build();
         final AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyapi.authorizationCodeUri().state("someExpectedStateString").scope("playlist-modify-public,playlist-modify-private").build();
         URI uri = authorizationCodeUriRequest.execute();
 
+        // Opens the redirect URI
         Desktop desktop = Desktop.getDesktop();
         desktop.browse(uri);
 
