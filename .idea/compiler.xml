@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="spotify-playlist-generator" />
+        <module name="spotify-playlist" />
       </profile>
     </annotationProcessing>
   </component>

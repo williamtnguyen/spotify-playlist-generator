@@ -8,8 +8,10 @@ import java.util.ArrayList;
 */
 public class Playlist {
 
-    // Collection of songs
-    private ArrayList<Song> collection;
+    public Playlist()
+    {
+        collection = new ArrayList<>();
+    }
 
     public void add(Song s) {
         // Adding unique songs only
@@ -21,4 +23,7 @@ public class Playlist {
     public void remove(Song s) {
         collection.remove(collection.indexOf(s));
     }
+
+    // Collection of songs
+    private ArrayList<Song> collection;
 }
