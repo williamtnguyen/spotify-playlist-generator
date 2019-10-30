@@ -10,7 +10,6 @@ import com.wrapper.spotify.requests.authorization.client_credentials.ClientCrede
 import java.awt.*;
 import java.io.IOException;
 import java.net.*;
-import java.util.Properties;
 
 public class TestAPI {
     private static String clientID;
