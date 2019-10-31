@@ -10,6 +10,7 @@ import com.wrapper.spotify.requests.authorization.client_credentials.ClientCrede
 import java.awt.*;
 import java.io.IOException;
 import java.net.*;
+import java.util.Scanner;
 
 public class TestAPI {
     private static String clientID;
@@ -17,6 +18,7 @@ public class TestAPI {
     private static SpotifyApi spotifyapi;
     private static ClientCredentialsRequest clientCredentialsRequest;
     private static URI redirectUri;
+    private static URL redirectURL;
     private static AuthorizationCodeUriRequest authorizationCodeUriRequest;
     private static AuthorizationCodeRequest authorizationCodeRequest;
     private static String code = "";
@@ -30,18 +32,35 @@ public class TestAPI {
 
         // SpotifyApi object requires the local vars to be set as its properties to grant authorization
         spotifyapi = new SpotifyApi.Builder().setClientId(clientID).setClientSecret(clientSecret).setRedirectUri(redirectUri).build();
-        final AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyapi.authorizationCodeUri().state("someExpectedStateString").scope("playlist-modify-public,playlist-modify-private").build();
+        final AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyapi.authorizationCodeUri().scope("playlist-modify-public,playlist-modify-private").build();
         URI uri = authorizationCodeUriRequest.execute();
 
         // Opens the redirect URI
+
+
+//        System.out.println("URI: " + uri.toString());
+
+        System.out.println("Open the link above and paste the redirect link below:" + "\n" +
+                "Note that you need to add an extra space after pasting the URL before clicking Enter.");
+
         Desktop desktop = Desktop.getDesktop();
         desktop.browse(uri);
+        /*Alternatively, could use Buffered reader below:*/
+        try {
+            Scanner in = new Scanner(System.in);
+            String input = in.nextLine();
+            redirectURL = new URL(input);
+            code = redirectURL.getQuery().split("code=")[1];
+        } catch(Exception e){
+            System.out.println("Not a valid link.");
+        }
 
+        System.out.println(code);
 
         authorizationCodeRequest = spotifyapi.authorizationCode(code).build();
         AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
-        spotifyapi.setAccessToken(authorizationCodeCredentials.getAccessToken());
-        spotifyapi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+//        spotifyapi.setAccessToken(authorizationCodeCredentials.getAccessToken());
+//        spotifyapi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
 
 
         authorizationCodeRefreshRequest = spotifyapi.authorizationCodeRefresh().build();
