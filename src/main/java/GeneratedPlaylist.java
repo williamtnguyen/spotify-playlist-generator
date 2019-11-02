@@ -9,14 +9,15 @@ import java.util.ArrayList;
     • Shuffle song order
     • Stores a collection of songs
 */
-public class Playlist {
+public class GeneratedPlaylist {
+
     private Authenticate user;
     private String name;
     private String playlistID;
     private ArrayList<Track> collection; // Collection of songs
     private boolean nameAlreadyExists;
 
-    public Playlist(String name, Authenticate user) {
+    public GeneratedPlaylist(String name, Authenticate user) {
         this.name = name;
         this.user = user;
         this.collection = new ArrayList<>();
@@ -26,7 +27,7 @@ public class Playlist {
     public String createPlaylist(String userID, Authenticate user) {
         if(!this.nameAlreadyExists) {
             try {
-                com.wrapper.spotify.model_objects.specification.Playlist playlist = user.getSpotifyApi()
+                Playlist playlist = user.getSpotifyApi()
                         .createPlaylist(userID, this.name).public_(false).build().execute();
                 System.out.println("Your playlist " + this.name + " has been created.");
 
