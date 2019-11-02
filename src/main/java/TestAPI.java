@@ -58,7 +58,7 @@ public class TestAPI {
         System.out.println(code);
 
         authorizationCodeRequest = spotifyapi.authorizationCode(code).build();
-        AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
+        AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
 //        spotifyapi.setAccessToken(authorizationCodeCredentials.getAccessToken());
 //        spotifyapi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
 
