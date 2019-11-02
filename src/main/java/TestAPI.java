@@ -2,10 +2,15 @@ import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.SpotifyHttpManager;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
+import com.wrapper.spotify.model_objects.specification.Artist;
+import com.wrapper.spotify.model_objects.specification.Paging;
+import com.wrapper.spotify.model_objects.specification.Track;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRefreshRequest;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
 import com.wrapper.spotify.requests.authorization.client_credentials.ClientCredentialsRequest;
+import com.wrapper.spotify.requests.data.personalization.simplified.GetUsersTopArtistsRequest;
+import com.wrapper.spotify.requests.data.personalization.simplified.GetUsersTopTracksRequest;
 
 import java.awt.*;
 import java.io.IOException;
@@ -35,17 +40,14 @@ public class TestAPI {
         final AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyapi.authorizationCodeUri().scope("playlist-modify-public,playlist-modify-private").build();
         URI uri = authorizationCodeUriRequest.execute();
 
-        // Opens the redirect URI
-
-
-//        System.out.println("URI: " + uri.toString());
-
         System.out.println("Open the link above and paste the redirect link below:" + "\n" +
                 "Note that you need to add an extra space after pasting the URL before clicking Enter.");
 
+        // Opens the redirect URI
         Desktop desktop = Desktop.getDesktop();
         desktop.browse(uri);
-        /*Alternatively, could use Buffered reader below:*/
+
+        // Gets the code from pasted url
         try {
             Scanner in = new Scanner(System.in);
             String input = in.nextLine();
@@ -57,15 +59,24 @@ public class TestAPI {
 
         System.out.println(code);
 
+        //
         authorizationCodeRequest = spotifyapi.authorizationCode(code).build();
-        AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
-//        spotifyapi.setAccessToken(authorizationCodeCredentials.getAccessToken());
-//        spotifyapi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+        AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
+        spotifyapi.setAccessToken(authorizationCodeCredentials.getAccessToken());
+        spotifyapi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
 
 
         authorizationCodeRefreshRequest = spotifyapi.authorizationCodeRefresh().build();
         // Set access and refresh token for further "spotifyApi" object usage
+        authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
         spotifyapi.setAccessToken(authorizationCodeCredentials.getAccessToken());
         spotifyapi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+
+        GetUsersTopTracksRequest getUsersTopTracksRequest = spotifyapi.getUsersTopTracks()
+                .build();
+
+        final Paging<Track> trackPaging = getUsersTopTracksRequest.execute();
+
+        System.out.println("Total: " + trackPaging.getTotal());
     }
 }
