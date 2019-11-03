@@ -1,18 +1,7 @@
-import com.wrapper.spotify.SpotifyApi;
-import com.wrapper.spotify.SpotifyHttpManager;
-import com.wrapper.spotify.exceptions.SpotifyWebApiException;
-import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
-import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRefreshRequest;
-import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
-import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
-import com.wrapper.spotify.requests.authorization.client_credentials.ClientCredentialsRequest;
-
-import java.awt.*;
-import java.io.IOException;
-import java.net.*;
-import java.util.Scanner;
-
 public class TestAPI {
+<<<<<<< .merge_file_WATo3J
+    public static void main(String[] args) {
+=======
     private static String clientID;
     private static String clientSecret;
     private static SpotifyApi spotifyapi;
@@ -58,7 +47,7 @@ public class TestAPI {
         System.out.println(code);
 
         authorizationCodeRequest = spotifyapi.authorizationCode(code).build();
-        AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
+        AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
 //        spotifyapi.setAccessToken(authorizationCodeCredentials.getAccessToken());
 //        spotifyapi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
 
@@ -67,5 +56,6 @@ public class TestAPI {
         // Set access and refresh token for further "spotifyApi" object usage
         spotifyapi.setAccessToken(authorizationCodeCredentials.getAccessToken());
         spotifyapi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+>>>>>>> .merge_file_3IlfhL
     }
 }
