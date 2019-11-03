@@ -1,10 +1,14 @@
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.SpotifyHttpManager;
+import com.wrapper.spotify.enums.ModelObjectType;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
+import com.wrapper.spotify.model_objects.specification.Artist;
+import com.wrapper.spotify.model_objects.specification.Paging;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRefreshRequest;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
+import com.wrapper.spotify.requests.data.personalization.GetUsersTopArtistsAndTracksRequest;
 
 import java.awt.*;
 import java.io.IOException;
@@ -27,7 +31,7 @@ public class ProgramManager {
     private URL redirectURL;
     private AuthorizationCodeUriRequest authorizationCodeUriRequest;
     private AuthorizationCodeRequest authorizationCodeRequest;
-    private String code = "";
+    private String code;
     private AuthorizationCodeRefreshRequest authorizationCodeRefreshRequest;
 
     public ProgramManager()
@@ -56,14 +60,13 @@ public class ProgramManager {
         System.out.println("Success! Authorization complete.");
         System.out.println("Expires in: " + authorizationCodeCredentials.getExpiresIn());
 
-        /**
-         * Rest of this code doesn't need to be executed right away since we just created the access token
-         * // Set access and refresh token for further "spotifyApi" object usage
-         * authorizationCodeRefreshRequest = spotifyapi.authorizationCodeRefresh().build();
-         * authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
-         * spotifyapi.setAccessToken(authorizationCodeCredentials.getAccessToken());
-         * spotifyapi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
-         */
+
+         //Rest of this code doesn't need to be executed right away since we just created the access token
+         // Set access and refresh token for further "spotifyApi" object usage
+         authorizationCodeRefreshRequest = spotifyapi.authorizationCodeRefresh().build();
+         authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
+         spotifyapi.setAccessToken(authorizationCodeCredentials.getAccessToken());
+         spotifyapi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
     }
 
     // Opens the user's default browser for authentication
@@ -81,5 +84,15 @@ public class ProgramManager {
     public String getCode (String url) throws MalformedURLException {
         redirectURL = new URL(url);
         return redirectURL.getQuery().split("code=")[1];
+    }
+
+    public void userTopArtistAndTrack() throws IOException, SpotifyWebApiException {
+        ModelObjectType type = ModelObjectType.ARTIST;
+        GetUsersTopArtistsAndTracksRequest getUsersTopArtistsAndTracksRequest = spotifyapi
+                .getUsersTopArtistsAndTracks(type)
+                .build();
+        Paging artistPaging = getUsersTopArtistsAndTracksRequest.execute();
+
+        System.out.println("Total: " + artistPaging.getTotal());
     }
 }
