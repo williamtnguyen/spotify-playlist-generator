@@ -55,5 +55,7 @@ public class GeneratedPlaylist {
         collection.remove(s);
     }
 
+    /* TODO: make shuffle method .. eventually */
+
 
 }
