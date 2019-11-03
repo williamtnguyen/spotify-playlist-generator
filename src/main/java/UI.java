@@ -47,6 +47,12 @@ public class UI extends Application {
             {
                 try {
                     programManager.authenticateUser(textField.getText());
+                    try
+                    {
+                        programManager.userTopArtistAndTrack();
+                    } catch (SpotifyWebApiException | IOException ea) {
+                        ea.printStackTrace();
+                    }
                 } catch (IOException | SpotifyWebApiException ex) {
                     // TODO: create warning box
                     ex.printStackTrace();
