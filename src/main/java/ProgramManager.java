@@ -9,6 +9,7 @@ import com.wrapper.spotify.requests.authorization.authorization_code.Authorizati
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
 import com.wrapper.spotify.requests.data.personalization.GetUsersTopArtistsAndTracksRequest;
+import com.wrapper.spotify.requests.data.personalization.simplified.GetUsersTopArtistsRequest;
 
 import java.awt.*;
 import java.io.IOException;
@@ -87,11 +88,16 @@ public class ProgramManager {
     }
 
     public void userTopArtistAndTrack() throws IOException, SpotifyWebApiException {
-        ModelObjectType type = ModelObjectType.ARTIST;
-        GetUsersTopArtistsAndTracksRequest getUsersTopArtistsAndTracksRequest = spotifyapi
-                .getUsersTopArtistsAndTracks(type)
+        GetUsersTopArtistsRequest getUsersTopArtistsRequest = spotifyapi.getUsersTopArtists()
                 .build();
-        Paging artistPaging = getUsersTopArtistsAndTracksRequest.execute();
+        Paging<Artist> artistPaging = getUsersTopArtistsRequest.execute();
+
+        Artist[] artists = artistPaging.getItems();
+
+        for (Artist a: artists)
+        {
+            System.out.println(a.getName());
+        }
 
         System.out.println("Total: " + artistPaging.getTotal());
     }
