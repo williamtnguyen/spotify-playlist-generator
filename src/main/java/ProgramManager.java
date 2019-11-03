@@ -35,7 +35,11 @@ public class ProgramManager {
         clientID = "f51f4ef2d861469195f1647d33cf7331";
         clientSecret = "0e4eeb82d1304dadb7de85073c8b4dab";
         redirectUri = SpotifyHttpManager.makeUri("https://www.google.com/");
-        spotifyapi = new SpotifyApi.Builder().setClientId(clientID).setClientSecret(clientSecret).setRedirectUri(redirectUri).build();
+        spotifyapi = new SpotifyApi.Builder()
+                .setClientId(clientID)
+                .setClientSecret(clientSecret)
+                .setRedirectUri(redirectUri)
+                .build();
     }
 
     // Retrieves code from entered redirect url and gets access token and refresh token
