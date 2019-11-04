@@ -101,4 +101,6 @@ public class ProgramManager {
 
         System.out.println("Total: " + artistPaging.getTotal());
     }
+
+
 }
