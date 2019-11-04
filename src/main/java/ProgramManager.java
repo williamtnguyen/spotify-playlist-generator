@@ -1,10 +1,13 @@
+import com.neovisionaries.i18n.CountryCode;
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.SpotifyHttpManager;
 import com.wrapper.spotify.enums.ModelObjectType;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 import com.wrapper.spotify.model_objects.specification.Artist;
+import com.wrapper.spotify.model_objects.specification.AudioFeatures;
 import com.wrapper.spotify.model_objects.specification.Paging;
+import com.wrapper.spotify.model_objects.specification.Track;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRefreshRequest;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
@@ -16,6 +19,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.util.Arrays;
 
 /*
     RESPONSIBILITIES:
@@ -76,6 +80,7 @@ public class ProgramManager {
         authorizationCodeUriRequest = spotifyapi.authorizationCodeUri().scope("playlist-read-private,user-top-read\n").build();
         URI uri = authorizationCodeUriRequest.execute();
 
+//        return uri.toURL();
         // Opens the redirect URI
         Desktop desktop = Desktop.getDesktop();
         desktop.browse(uri);
@@ -88,15 +93,20 @@ public class ProgramManager {
     }
 
     public void userTopArtistAndTrack() throws IOException, SpotifyWebApiException {
-        GetUsersTopArtistsRequest getUsersTopArtistsRequest = spotifyapi.getUsersTopArtists()
-                .build();
+        GetUsersTopArtistsRequest getUsersTopArtistsRequest = spotifyapi.getUsersTopArtists().build();
         Paging<Artist> artistPaging = getUsersTopArtistsRequest.execute();
 
         Artist[] artists = artistPaging.getItems();
 
         for (Artist a: artists)
         {
-            System.out.println(a.getName());
+            System.out.println(a.getName() + "'s Top Tracks:");
+            Track[] tracks = spotifyapi.getArtistsTopTracks(a.getId(), CountryCode.CA).build().execute();
+            for (Track t: tracks)
+            {
+                System.out.println("• " + t.getName());
+            }
+
         }
 
         System.out.println("Total: " + artistPaging.getTotal());
