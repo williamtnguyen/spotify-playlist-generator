@@ -106,7 +106,7 @@ public class ProgramManager {
             {
                 System.out.println("• " + t.getName());
             }
-
+            System.out.print("\n");
         }
 
         System.out.println("Total: " + artistPaging.getTotal());
