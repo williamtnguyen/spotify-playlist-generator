@@ -100,11 +100,11 @@ public class ProgramManager {
 
         for (Artist a: artists)
         {
-            System.out.println(a.getName());
+            System.out.println(a.getName() + "'s Top Tracks:");
             Track[] tracks = spotifyapi.getArtistsTopTracks(a.getId(), CountryCode.CA).build().execute();
             for (Track t: tracks)
             {
-                System.out.print(t.getName() + ", ");
+                System.out.println("• " + t.getName());
             }
 
         }
