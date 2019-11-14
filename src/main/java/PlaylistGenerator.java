@@ -2,7 +2,6 @@ import com.neovisionaries.i18n.CountryCode;
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.specification.*;
-import com.wrapper.spotify.model_objects.specification.User;
 import com.wrapper.spotify.requests.data.personalization.simplified.GetUsersTopArtistsRequest;
 import com.wrapper.spotify.requests.data.tracks.GetAudioFeaturesForSeveralTracksRequest;
 import com.wrapper.spotify.requests.data.users_profile.GetCurrentUsersProfileRequest;
@@ -115,7 +114,7 @@ public class PlaylistGenerator {
     // Step 3: create the playlist
     public void createPlaylist(List<String> selectedSongURIs, int mood) throws IOException, SpotifyWebApiException {
         GetCurrentUsersProfileRequest getCurrentUsersProfile = spotifyApi.getCurrentUsersProfile().build();
-        User user = getCurrentUsersProfile.execute();
+        com.wrapper.spotify.model_objects.specification.User user = getCurrentUsersProfile.execute();
         String userID = user.getId();
 
         Playlist newPlaylist = spotifyApi.createPlaylist(userID, "MoodTape" + String.valueOf(mood)).build().execute();

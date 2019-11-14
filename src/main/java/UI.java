@@ -36,17 +36,26 @@ public class UI extends Application {
         // Opens default browser for spotify login
         try {
             programManager.openBrowserForAuthentication();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             //TODO: create warning box
         }
 
-        try {
-            programManager.authenticateUser("https://www.google.com/?code=".concat(programManager.getCode()));
-        }
-        catch (IOException | SpotifyWebApiException e) {
-            //TODO: create warning box
-        }
+        submitBtn.setOnAction(e -> {
+            if (textField.getText().length() != 0) {
+                try {
+                    programManager.authenticateUser(textField.getText());
+                } catch (IOException | SpotifyWebApiException ex) {
+                    // TODO: create warning box
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+//            try {
+//                programManager.authenticateUser("https://www.google.com/?code=".concat(programManager.getCode()));
+//            } catch (SpotifyWebApiException | IOException ex) {
+//                ex.printStackTrace();
+//            }
 
 //        // Authenticates user once submit button is clicked
 //        submitBtn.setOnAction(e ->{
@@ -69,7 +78,7 @@ public class UI extends Application {
 
         // Set layout and add elements to pane
         GridPane grid = new GridPane();
-        Text scenetitle = new Text("Welcome");
+        Text scenetitle = new Text("Welcome to Spotify Playlist");
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(scenetitle, 0, 0, 2, 1);
         grid.setAlignment(Pos.CENTER);
@@ -82,7 +91,7 @@ public class UI extends Application {
 
         // Set pane to scene, set scene into stage, and show stage
         // Note: stage = window and scene = panel
-        Scene scene = new Scene(grid, 350, 650);
+        Scene scene = new Scene(grid, 720, 350);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
