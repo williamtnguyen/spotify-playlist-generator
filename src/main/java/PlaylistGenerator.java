@@ -1,12 +1,10 @@
 import com.neovisionaries.i18n.CountryCode;
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
-import com.wrapper.spotify.model_objects.specification.Artist;
-import com.wrapper.spotify.model_objects.specification.AudioFeatures;
-import com.wrapper.spotify.model_objects.specification.Paging;
-import com.wrapper.spotify.model_objects.specification.Track;
+import com.wrapper.spotify.model_objects.specification.*;
 import com.wrapper.spotify.requests.data.personalization.simplified.GetUsersTopArtistsRequest;
 import com.wrapper.spotify.requests.data.tracks.GetAudioFeaturesForSeveralTracksRequest;
+import com.wrapper.spotify.requests.data.users_profile.GetCurrentUsersProfileRequest;
 
 import java.io.IOException;
 import java.net.URI;
@@ -22,19 +20,26 @@ import java.util.List;
 */
 public class PlaylistGenerator {
 
+    // local private reference to be reused in methods
+    private SpotifyApi spotifyApi;
+
+    public PlaylistGenerator(SpotifyApi spotifyApi) {
+        this.spotifyApi = spotifyApi;
+    }
+
     // Step 1: Returns a map of artist names mapped to an array of their top tracks
-    public HashMap<String, Track[]> userTopArtistAndTrack(SpotifyApi spotifyApi) throws IOException, SpotifyWebApiException {
+    public HashMap<String, Track[]> userTopArtistAndTrack() throws IOException, SpotifyWebApiException {
 
         GetUsersTopArtistsRequest getUsersTopArtistsRequest = spotifyApi.getUsersTopArtists().build();
         Paging<Artist> artistPaging = getUsersTopArtistsRequest.execute();
         Artist[] artists = artistPaging.getItems();
 
-        HashMap<String, Track[]> artistTracks = new HashMap<>();
+        HashMap<String, Track[]> topTracks = new HashMap<>();
         for (Artist a: artists) {
             Track[] tracks = spotifyApi.getArtistsTopTracks(a.getId(), CountryCode.CA).build().execute();
-            artistTracks.put(a.getName(), tracks);
+            topTracks.put(a.getName(), tracks);
         }
-        return artistTracks;
+        return topTracks;
     }
 
     /**
@@ -44,7 +49,7 @@ public class PlaylistGenerator {
      * 2. Danceability: how suitable a track is for dancing
      * 3. Energy: perceptual measure of intensity and activity
      */
-    public List<String> filterMood(SpotifyApi spotifyApi, HashMap<String, Track[]> topTracks, int mood) throws IOException, SpotifyWebApiException {
+    public List<String> filterMood(HashMap<String, Track[]> topTracks, int mood) throws IOException, SpotifyWebApiException {
 
         ArrayList<String> selectedSongURIs = new ArrayList<>();
         for(String artistName : topTracks.keySet()) {
@@ -100,5 +105,19 @@ public class PlaylistGenerator {
         // shuffle the array and then return it
         Collections.shuffle(selectedSongURIs);
         return selectedSongURIs;
+    }
+
+    // Step 3: create the playlist
+    public void createPlaylist(List<URI> selectedSongURIs, int mood) throws IOException, SpotifyWebApiException {
+        GetCurrentUsersProfileRequest getCurrentUsersProfile = spotifyApi.getCurrentUsersProfile().build();
+        User user = getCurrentUsersProfile.execute();
+        String userID = user.getId();
+
+        Playlist newPlaylist = spotifyApi.createPlaylist(userID, "MoodTape" + String.valueOf(mood)).build().execute();
+        String playlistID = newPlaylist.getId();
+
+        Collections.shuffle(selectedSongURIs);
+        songURIArr[] = new
+        spotifyApi.addTracksToPlaylist(playlistID, );
     }
 }
