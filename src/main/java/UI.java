@@ -69,7 +69,7 @@ public class UI extends Application {
 
         // Set layout and add elements to pane
         GridPane grid = new GridPane();
-        Text scenetitle = new Text("Welcome");
+        Text scenetitle = new Text("Welcome to Spotify Playlist");
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(scenetitle, 0, 0, 2, 1);
         grid.setAlignment(Pos.CENTER);
