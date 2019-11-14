@@ -53,6 +53,7 @@ public class PlaylistGenerator {
 
         ArrayList<String> selectedSongURIs = new ArrayList<>();
         for(String artistName : topTracks.keySet()) {
+            // here we need to pass a long comma-separated-list String of Track ID's into .getAudioFeaturesForSeveralTracks
             GetAudioFeaturesForSeveralTracksRequest getAudioFeatures = spotifyApi.getAudioFeaturesForSeveralTracks().build();
             AudioFeatures[] audioFeatures = getAudioFeatures.execute();
 
