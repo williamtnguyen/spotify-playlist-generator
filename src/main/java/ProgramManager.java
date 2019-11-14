@@ -93,6 +93,10 @@ public class ProgramManager {
         return redirectURL.getQuery().split("code=")[1];
     }
 
+    public String getCode() {
+        return this.code;
+    }
+
     // Encapsulation of private object
     public SpotifyApi getSpotifyApi() {
         return spotifyapi;
