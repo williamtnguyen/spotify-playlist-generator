@@ -17,14 +17,14 @@ public class GeneratedPlaylist {
     private ArrayList<Track> collection; // Collection of songs
     private boolean nameAlreadyExists;
 
-    public GeneratedPlaylist(String name, Authenticate user) {
+    public GeneratedPlaylist(String name) {
         this.name = name;
-        this.user = user;
+//        this.user = user;
         this.collection = new ArrayList<>();
         this.nameAlreadyExists = true;
     }
 
-    public String createPlaylist(String userID, Authenticate user) {
+    public String createPlaylist(String userID) {
         if(!this.nameAlreadyExists) {
             try {
                 Playlist playlist = user.getSpotifyApi()

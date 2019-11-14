@@ -20,6 +20,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.HashMap;
 
 /*
     RESPONSIBILITIES:
@@ -92,25 +93,12 @@ public class ProgramManager {
         return redirectURL.getQuery().split("code=")[1];
     }
 
-    public void userTopArtistAndTrack() throws IOException, SpotifyWebApiException {
-        GetUsersTopArtistsRequest getUsersTopArtistsRequest = spotifyapi.getUsersTopArtists().build();
-        Paging<Artist> artistPaging = getUsersTopArtistsRequest.execute();
-
-        Artist[] artists = artistPaging.getItems();
-
-        for (Artist a: artists)
-        {
-            System.out.println(a.getName() + "'s Top Tracks:");
-            Track[] tracks = spotifyapi.getArtistsTopTracks(a.getId(), CountryCode.CA).build().execute();
-            for (Track t: tracks)
-            {
-                System.out.println("• " + t.getName());
-            }
-            System.out.print("\n");
-        }
-
-        System.out.println("Total: " + artistPaging.getTotal());
+    public String getCode() {
+        return this.code;
     }
 
-
+    // Encapsulation of private object
+    public SpotifyApi getSpotifyApi() {
+        return spotifyapi;
+    }
 }
