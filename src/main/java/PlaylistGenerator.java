@@ -114,7 +114,7 @@ public class PlaylistGenerator {
     // Step 3: create the playlist
     public void createPlaylist(List<String> selectedSongURIs, int mood) throws IOException, SpotifyWebApiException {
         GetCurrentUsersProfileRequest getCurrentUsersProfile = spotifyApi.getCurrentUsersProfile().build();
-        User user = getCurrentUsersProfile.execute();
+        com.wrapper.spotify.model_objects.specification.User user = getCurrentUsersProfile.execute();
         String userID = user.getId();
 
         Playlist newPlaylist = spotifyApi.createPlaylist(userID, "MoodTape" + String.valueOf(mood)).build().execute();
