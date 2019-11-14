@@ -23,6 +23,7 @@ public class PlaylistGenerator {
     // local private reference to be reused in methods
     private SpotifyApi spotifyApi;
 
+    // upon initialization of a PlaylistGenerator instance, pass in the spotifyApi from authentication
     public PlaylistGenerator(SpotifyApi spotifyApi) {
         this.spotifyApi = spotifyApi;
     }
@@ -48,14 +49,15 @@ public class PlaylistGenerator {
      * 1. Valence: musical positiveness conveyed by a track
      * 2. Danceability: how suitable a track is for dancing
      * 3. Energy: perceptual measure of intensity and activity
-     * @return
+     * @return a list of the selected track URI'
      */
     public ArrayList<String> filterMood(HashMap<String, Track[]> topTracks, int mood) throws IOException, SpotifyWebApiException {
 
         ArrayList<String> selectedSongURIs = new ArrayList<>();
         for(String artistName : topTracks.keySet()) {
             // here we need to pass a long comma-separated-list String of Track ID's into .getAudioFeaturesForSeveralTracks
-            GetAudioFeaturesForSeveralTracksRequest getAudioFeatures = spotifyApi.getAudioFeaturesForSeveralTracks().build();
+            String stringOfIDs = trackIDToString(topTracks.get(artistName)); // this makes a fat string full of the track IDs
+            GetAudioFeaturesForSeveralTracksRequest getAudioFeatures = spotifyApi.getAudioFeaturesForSeveralTracks(stringOfIDs).build();
             AudioFeatures[] audioFeatures = getAudioFeatures.execute();
 
             // for each set of audio-features of each track
@@ -110,7 +112,7 @@ public class PlaylistGenerator {
     }
 
     // Step 3: create the playlist
-    public void createPlaylist(List<URI> selectedSongURIs, int mood) throws IOException, SpotifyWebApiException {
+    public void createPlaylist(List<String> selectedSongURIs, int mood) throws IOException, SpotifyWebApiException {
         GetCurrentUsersProfileRequest getCurrentUsersProfile = spotifyApi.getCurrentUsersProfile().build();
         User user = getCurrentUsersProfile.execute();
         String userID = user.getId();
@@ -120,7 +122,23 @@ public class PlaylistGenerator {
 
         Collections.shuffle(selectedSongURIs);
         // here we need to convert the arraylist to an array bc
-        // this method below vvv requires an array of URI (ie URI[])
-//        spotifyApi.addTracksToPlaylist(playlistID, );
+        // this method below vvv requires an array of URI Strings (ie, String[])
+        spotifyApi.addTracksToPlaylist(userID, selectedSongURIs.toArray(new String[0]));
+    }
+
+    /* Supplementary Methods */
+
+    // turns an array of Track objects to a comma-separated-string of the respective track ID's
+    private String trackIDToString(Track[] tracks) {
+        String result = "";
+        if(tracks.length != 0) {
+            // building a comma-separated-string of track ID's
+            StringBuilder ids = new StringBuilder();
+            for(Track track : tracks) {
+                ids.append(track.getId()).append(",");
+            }
+            result = ids.deleteCharAt(ids.length() - 1).toString();
+        }
+        return result;
     }
 }
