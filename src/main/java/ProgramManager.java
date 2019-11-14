@@ -93,22 +93,8 @@ public class ProgramManager {
         return redirectURL.getQuery().split("code=")[1];
     }
 
-    // Returns a map of artist names mapped to an array of their top tracks
-    public HashMap<String, Track[]> userTopArtistAndTrack() throws IOException, SpotifyWebApiException {
-        GetUsersTopArtistsRequest getUsersTopArtistsRequest = spotifyapi.getUsersTopArtists().build();
-        Paging<Artist> artistPaging = getUsersTopArtistsRequest.execute();
-
-        Artist[] artists = artistPaging.getItems();
-
-        HashMap<String, Track[]> artistTracks = new HashMap<>();
-        for (Artist a: artists)
-        {
-            Track[] tracks = spotifyapi.getArtistsTopTracks(a.getId(), CountryCode.CA).build().execute();
-            artistTracks.put(a.getName(), tracks);
-        }
-//        System.out.println("Total: " + artistPaging.getTotal());
-        return artistTracks;
+    // Encapsulation of private object
+    public SpotifyApi getSpotifyApi() {
+        return spotifyapi;
     }
-
-
 }
