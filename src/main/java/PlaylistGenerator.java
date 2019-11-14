@@ -48,8 +48,9 @@ public class PlaylistGenerator {
      * 1. Valence: musical positiveness conveyed by a track
      * 2. Danceability: how suitable a track is for dancing
      * 3. Energy: perceptual measure of intensity and activity
+     * @return
      */
-    public List<String> filterMood(HashMap<String, Track[]> topTracks, int mood) throws IOException, SpotifyWebApiException {
+    public ArrayList<String> filterMood(HashMap<String, Track[]> topTracks, int mood) throws IOException, SpotifyWebApiException {
 
         ArrayList<String> selectedSongURIs = new ArrayList<>();
         for(String artistName : topTracks.keySet()) {
