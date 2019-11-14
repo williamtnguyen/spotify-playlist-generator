@@ -117,7 +117,8 @@ public class PlaylistGenerator {
         String playlistID = newPlaylist.getId();
 
         Collections.shuffle(selectedSongURIs);
-        songURIArr[] = new
-        spotifyApi.addTracksToPlaylist(playlistID, );
+        // here we need to convert the arraylist to an array bc
+        // this method below vvv requires an array of URI (ie URI[])
+//        spotifyApi.addTracksToPlaylist(playlistID, );
     }
 }
