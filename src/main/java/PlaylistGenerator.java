@@ -30,8 +30,7 @@ public class PlaylistGenerator {
         Artist[] artists = artistPaging.getItems();
 
         HashMap<String, Track[]> artistTracks = new HashMap<>();
-        for (Artist a: artists)
-        {
+        for (Artist a: artists) {
             Track[] tracks = spotifyApi.getArtistsTopTracks(a.getId(), CountryCode.CA).build().execute();
             artistTracks.put(a.getName(), tracks);
         }
@@ -77,14 +76,14 @@ public class PlaylistGenerator {
                }
                else if(0.50 <= mood && mood < 0.75) {
                    if((mood-0.075) <= trackData.getValence() && trackData.getValence() <= (mood+0.075)) {
-                       if(trackData.getDanceability() >= (mood/2.5) && trackData.getEnergy() >= (mood/2)) {
+                       if(trackData.getDanceability() >= (mood/2.5) && trackData.getEnergy() >= (mood/2.0)) {
                            selectedSongURIs.add(trackData.getUri());
                        }
                    }
                }
                else if(0.75 <= mood && mood < 0.90) {
                    if((mood-0.075) <= trackData.getValence() && trackData.getValence() <= (mood+0.075)) {
-                       if(trackData.getDanceability() >= (mood/2) && trackData.getEnergy() >= (mood/1.75)) {
+                       if(trackData.getDanceability() >= (mood/2.0) && trackData.getEnergy() >= (mood/1.75)) {
                            selectedSongURIs.add(trackData.getUri());
                        }
                    }
