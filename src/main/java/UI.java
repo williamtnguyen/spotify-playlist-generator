@@ -42,7 +42,10 @@ public class UI extends Application {
         }
 
         try {
-            programManager.authenticateUser("https://www.google.com/");
+            programManager.authenticateUser("https://www.google.com/?code=".concat(programManager.getCode()));
+        }
+        catch (IOException | SpotifyWebApiException e) {
+            //TODO: create warning box
         }
 
 //        // Authenticates user once submit button is clicked
