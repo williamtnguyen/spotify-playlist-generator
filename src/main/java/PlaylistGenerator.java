@@ -43,7 +43,7 @@ public class PlaylistGenerator {
     }
 
     /**
-     * Step 2:
+     * Step 2: Algorithm to create a list of Track URI's that suffice the mood-index
      * THREE METRICS USED TO MEASURE MOOD: (0.0 to 1.0 scale)
      * 1. Valence: musical positiveness conveyed by a track
      * 2. Danceability: how suitable a track is for dancing
