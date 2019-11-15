@@ -22,6 +22,7 @@ public class PlaylistGenerator {
 
     // local private reference to be reused in methods
     private SpotifyApi spotifyApi;
+    private String playlistID;
 
     // upon initialization of a PlaylistGenerator instance, pass in the spotifyApi from authentication
     public PlaylistGenerator(SpotifyApi spotifyApi) {
@@ -51,7 +52,7 @@ public class PlaylistGenerator {
      * 3. Energy: perceptual measure of intensity and activity
      * @return a list of the selected track URI'
      */
-    public ArrayList<String> filterMood(HashMap<String, Track[]> topTracks, int mood) throws IOException, SpotifyWebApiException {
+    public ArrayList<String> filterMood(HashMap<String, Track[]> topTracks, double mood) throws IOException, SpotifyWebApiException {
 
         ArrayList<String> selectedSongURIs = new ArrayList<>();
         for(String artistName : topTracks.keySet()) {
@@ -118,12 +119,14 @@ public class PlaylistGenerator {
         String userID = user.getId();
 
         Playlist newPlaylist = spotifyApi.createPlaylist(userID, "MoodTape" + String.valueOf(mood)).build().execute();
-        String playlistID = newPlaylist.getId();
+        playlistID = newPlaylist.getId();
 
         Collections.shuffle(selectedSongURIs);
         // here we need to convert the arraylist to an array bc
         // this method below vvv requires an array of URI Strings (ie, String[])
-        spotifyApi.addTracksToPlaylist(userID, selectedSongURIs.toArray(new String[0]));
+        spotifyApi.addTracksToPlaylist(userID, selectedSongURIs.toArray(new String[selectedSongURIs.size()]))
+                .build()
+                .execute();
     }
 
     /* Supplementary Methods */
@@ -140,5 +143,9 @@ public class PlaylistGenerator {
             result = ids.deleteCharAt(ids.length() - 1).toString();
         }
         return result;
+    }
+
+    public PlaylistTrack[] getPlaylist() throws IOException, SpotifyWebApiException {
+        return spotifyApi.getPlaylistsTracks(playlistID).build().execute().getItems();
     }
 }
