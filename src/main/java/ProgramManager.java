@@ -4,10 +4,7 @@ import com.wrapper.spotify.SpotifyHttpManager;
 import com.wrapper.spotify.enums.ModelObjectType;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
-import com.wrapper.spotify.model_objects.specification.Artist;
-import com.wrapper.spotify.model_objects.specification.AudioFeatures;
-import com.wrapper.spotify.model_objects.specification.Paging;
-import com.wrapper.spotify.model_objects.specification.Track;
+import com.wrapper.spotify.model_objects.specification.*;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRefreshRequest;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
@@ -19,6 +16,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -39,6 +37,7 @@ public class ProgramManager {
     private AuthorizationCodeRequest authorizationCodeRequest;
     private String code;
     private AuthorizationCodeRefreshRequest authorizationCodeRefreshRequest;
+    private PlaylistGenerator playlistGenerator;
 
     public ProgramManager()
     {
@@ -77,6 +76,7 @@ public class ProgramManager {
          authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
          spotifyapi.setAccessToken(authorizationCodeCredentials.getAccessToken());
          spotifyapi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+        playlistGenerator = new PlaylistGenerator(spotifyapi);
     }
 
     // Opens the user's default browser for authentication
@@ -88,6 +88,13 @@ public class ProgramManager {
         // Opens the redirect URI
         Desktop desktop = Desktop.getDesktop();
         desktop.browse(uri);
+    }
+
+    public PlaylistTrack[] generatePlayList(double moodValue) throws IOException, SpotifyWebApiException {
+        HashMap<String, Track[]> topTracksAndArtists = playlistGenerator.userTopArtistAndTrack();
+        ArrayList<String> filteredTracksAndArtitsts = playlistGenerator.filterMood(topTracksAndArtists, moodValue);
+        playlistGenerator.createPlaylist(filteredTracksAndArtitsts, moodValue);
+        return playlistGenerator.getPlaylist();
     }
 
     public String getCode() {
