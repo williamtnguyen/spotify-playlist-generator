@@ -54,7 +54,11 @@ public class ProgramManager {
 
     // Retrieves code from entered redirect url and gets access token and refresh token
     public void authenticateUser(String redirectUrlFromUser) throws SpotifyWebApiException, IOException {
-        code = this.getCode(redirectUrlFromUser);
+        // Sets the redirect url to the url entered by the user
+        redirectURL = new URL(redirectUrlFromUser);
+
+        // Get the code from the redirect url
+        code = redirectURL.getQuery().split("code=")[1];
         System.out.println(code);
 
         // Retrieves access and refresh token and sets it in the spotifyapi variable in order to access user's spotify data
@@ -81,16 +85,9 @@ public class ProgramManager {
         authorizationCodeUriRequest = spotifyapi.authorizationCodeUri().scope("playlist-read-private,user-top-read\n").build();
         URI uri = authorizationCodeUriRequest.execute();
 
-//        return uri.toURL();
         // Opens the redirect URI
         Desktop desktop = Desktop.getDesktop();
         desktop.browse(uri);
-    }
-
-    // Strips the code from the redirect url link that the user pasted into the textbox of the UI
-    public String getCode (String url) throws MalformedURLException {
-        redirectURL = new URL(url);
-        return redirectURL.getQuery().split("code=")[1];
     }
 
     public String getCode() {
