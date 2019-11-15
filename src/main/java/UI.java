@@ -84,6 +84,7 @@ public class UI extends Application {
 
                     // Create a scene for user to input mood value
                     Scene mainScene = new Scene(grid, 720, 350);
+                    primaryStage.setTitle("Set mood");
                     primaryStage.setScene(mainScene);
                     primaryStage.show();
 
@@ -109,6 +110,7 @@ public class UI extends Application {
 
                             // Create a scene for displaying the track names and display it in primaryStage
                             Scene playlistScene = new Scene(root, 720, 350);
+                            primaryStage.setTitle("Generated Playlist");
                             primaryStage.setScene(playlistScene);
                             primaryStage.show();
                         } catch (IOException | SpotifyWebApiException ex) {

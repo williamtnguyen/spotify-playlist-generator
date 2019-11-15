@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -91,7 +92,8 @@ public class ProgramManager {
 
     public PlaylistTrack[] generatePlayList(double moodValue) throws IOException, SpotifyWebApiException {
         HashMap<String, Track[]> topTracksAndArtists = playlistGenerator.userTopArtistAndTrack();
-        playlistGenerator.filterMood(topTracksAndArtists, moodValue);
+        ArrayList<String> filteredTracksAndArtitsts = playlistGenerator.filterMood(topTracksAndArtists, moodValue);
+        playlistGenerator.createPlaylist(filteredTracksAndArtitsts, moodValue);
         return playlistGenerator.getPlaylist();
     }
 

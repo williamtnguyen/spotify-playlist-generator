@@ -113,18 +113,17 @@ public class PlaylistGenerator {
     }
 
     // Step 3: create the playlist
-    public void createPlaylist(List<String> selectedSongURIs, int mood) throws IOException, SpotifyWebApiException {
+    public void createPlaylist(List<String> selectedSongURIs, double mood) throws IOException, SpotifyWebApiException {
         GetCurrentUsersProfileRequest getCurrentUsersProfile = spotifyApi.getCurrentUsersProfile().build();
         com.wrapper.spotify.model_objects.specification.User user = getCurrentUsersProfile.execute();
         String userID = user.getId();
 
         Playlist newPlaylist = spotifyApi.createPlaylist(userID, "MoodTape" + String.valueOf(mood)).build().execute();
         playlistID = newPlaylist.getId();
-
         Collections.shuffle(selectedSongURIs);
         // here we need to convert the arraylist to an array bc
         // this method below vvv requires an array of URI Strings (ie, String[])
-        spotifyApi.addTracksToPlaylist(userID, selectedSongURIs.toArray(new String[selectedSongURIs.size()]))
+        spotifyApi.addTracksToPlaylist(playlistID, selectedSongURIs.toArray(new String[selectedSongURIs.size()]))
                 .build()
                 .execute();
     }
