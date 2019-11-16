@@ -14,12 +14,8 @@ public class htmlTester extends Application
 
         WebView browser = new WebView();
 
-        // Retrieve the html file
-        String tempHTMLFilePath = new File("src/main/java/website.html").toURI().toURL().toString().substring(6);
-        tempHTMLFilePath = tempHTMLFilePath.replace("/", "\\\\");
-        File HTMLfilePath = new File(tempHTMLFilePath);
-        browser.getEngine().load(HTMLfilePath.toURI().toURL().toString());
-
+        String html = getClass().getResource("website.html").toExternalForm();
+        browser.getEngine().load(html);
 
         StackPane sp = new StackPane();
         sp.getChildren().add(browser);
