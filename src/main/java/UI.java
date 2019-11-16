@@ -126,31 +126,6 @@ public class UI extends Application {
             }
         });
 
-//            try {
-//                programManager.authenticateUser("https://www.google.com/?code=".concat(programManager.getCode()));
-//            } catch (SpotifyWebApiException | IOException ex) {
-//                ex.printStackTrace();
-//            }
-
-//        // Authenticates user once submit button is clicked
-//        submitBtn.setOnAction(e ->{
-//            if (textField.getText().length() != 0)
-//            {
-//                try {
-//                    programManager.authenticateUser(textField.getText());
-//                    try
-//                    {
-//                        programManager.userTopArtistAndTrack();
-//                    } catch (SpotifyWebApiException | IOException ea) {
-//                        ea.printStackTrace();
-//                    }
-//                } catch (IOException | SpotifyWebApiException ex) {
-//                    // TODO: create warning box
-//                    ex.printStackTrace();
-//                }
-//            }
-//        });
-
         // Set layout and add elements to pane
         GridPane grid = new GridPane();
         Text scenetitle = new Text("Welcome to Spotify Playlist");
