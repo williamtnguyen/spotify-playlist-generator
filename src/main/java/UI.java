@@ -53,7 +53,7 @@ public class UI extends Application {
                     programManager.authenticateUser(textField.getText());
 
                     // Create and initialize elements
-                    Text title = new Text("What's your mood? (0 - sad, 1 - happy)");
+                    Text title = new Text("What's your mood? (0: sad, 1: happy)");
                     GridPane grid = new GridPane();
                     Button generatePlaylistBtn = new Button("Generate Playlist");
                     title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
