@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -53,7 +54,7 @@ public class UI extends Application {
                     programManager.authenticateUser(textField.getText());
 
                     // Create and initialize elements
-                    Text title = new Text("What's your mood? (0 - sad, 1 - happy)");
+                    Text title = new Text("What's your mood? (0: sad, 1: happy)");
                     GridPane grid = new GridPane();
                     Button generatePlaylistBtn = new Button("Generate Playlist");
                     title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
@@ -74,6 +75,7 @@ public class UI extends Application {
                     grid.add(generatePlaylistBtn,0,2);
 
                     // Set center all elements and padding
+                    GridPane.setHgrow(moodSlider, Priority.ALWAYS);
                     grid.setAlignment(Pos.CENTER);
                     grid.setHgap(10);
                     grid.setVgap(10);
