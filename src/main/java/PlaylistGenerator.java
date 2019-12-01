@@ -118,7 +118,7 @@ public class PlaylistGenerator {
         com.wrapper.spotify.model_objects.specification.User user = getCurrentUsersProfile.execute();
         String userID = user.getId();
 
-        Playlist newPlaylist = spotifyApi.createPlaylist(userID, "MoodTape" + String.valueOf(mood)).build().execute();
+        Playlist newPlaylist = spotifyApi.createPlaylist(userID, "MoodTape: ".concat(String.format("%.2f", mood))).build().execute();
         playlistID = newPlaylist.getId();
         Collections.shuffle(selectedSongURIs);
         // here we need to convert the arraylist to an array bc
