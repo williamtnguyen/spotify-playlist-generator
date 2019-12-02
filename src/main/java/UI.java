@@ -1,4 +1,5 @@
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
+import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
 import com.wrapper.spotify.model_objects.specification.PlaylistTrack;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -9,6 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -18,6 +20,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import javax.print.DocFlavor;
 import java.io.IOException;
 
 public class UI extends Application {
@@ -96,25 +99,40 @@ public class UI extends Application {
                             PlaylistTrack[] tracks = programManager.generatePlayList(moodSlider.getValue());
 
                             // Initialize data structures for listing track names
-                            ListView<String> list = new ListView<String>();
-                            ObservableList<String> items = FXCollections.observableArrayList();
+                            ListView<String> songAndArtistList = new ListView<String>();
+                            ObservableList<String> songAndArtists = FXCollections.observableArrayList();
 
                             // Get track names and add them into items
                             for (int i = 0; i < tracks.length; i++) {
-                                items.add(tracks[i].getTrack().getName());
+                                StringBuilder artistNames = new StringBuilder();
+                                artistNames.append(tracks[i].getTrack().getName() + " - ");
+                                ArtistSimplified[] artistArray = tracks[i].getTrack().getArtists();
+
+                                for (int index = 0; index < artistArray.length; index++)
+                                {
+                                    artistNames.append(artistArray[index].getName());
+
+                                    if (index != artistArray.length - 1)
+                                    {
+                                        artistNames.append(", ");
+                                    }
+                                }
+
+                                songAndArtists.add(artistNames.toString());
                             }
 
-                            list.setItems(items);
+                            songAndArtistList.setItems(songAndArtists);
 
                             // Create StackPane layout and add the list of track names into it
-                            StackPane root = new StackPane();
-                            root.getChildren().add(list);
+                            StackPane stackPane = new StackPane();
+                            stackPane.getChildren().add(songAndArtistList);
 
                             // Create a scene for displaying the track names and display it in primaryStage
-                            Scene playlistScene = new Scene(root, 720, 350);
+                            Scene playlistScene = new Scene(stackPane, 720, 350);
                             primaryStage.setTitle("Generated Playlist");
                             primaryStage.setScene(playlistScene);
                             primaryStage.show();
+
                         } catch (IOException | SpotifyWebApiException ex) {
                             ex.printStackTrace();
                         }
