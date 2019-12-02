@@ -37,7 +37,7 @@ public class PlaylistGenerator {
         Artist[] artists = artistPaging.getItems();
 
         HashMap<String, Track[]> topTracks = new HashMap<>();
-        for (Artist a: artists) {
+        for (Artist a : artists) {
             Track[] tracks = spotifyApi.getArtistsTopTracks(a.getId(), CountryCode.CA).build().execute();
             topTracks.put(a.getName(), tracks);
         }
