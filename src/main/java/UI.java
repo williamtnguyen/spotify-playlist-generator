@@ -107,17 +107,13 @@ public class UI extends Application {
                                 StringBuilder artistNames = new StringBuilder();
                                 artistNames.append(tracks[i].getTrack().getName() + " - ");
                                 ArtistSimplified[] artistArray = tracks[i].getTrack().getArtists();
-
-                                for (int index = 0; index < artistArray.length; index++)
-                                {
+                                // Get artist name and append it to the song name separated by commas
+                                for (int index = 0; index < artistArray.length; index++) {
                                     artistNames.append(artistArray[index].getName());
-
-                                    if (index != artistArray.length - 1)
-                                    {
+                                    if (index != artistArray.length - 1) {
                                         artistNames.append(", ");
                                     }
                                 }
-
                                 songAndArtists.add(artistNames.toString());
                             }
 
