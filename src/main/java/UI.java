@@ -10,12 +10,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
-
-import javax.print.DocFlavor;
-import javax.swing.*;
 import java.io.IOException;
 
 public class UI extends Application {
@@ -43,6 +39,8 @@ public class UI extends Application {
             programManager.openBrowserForAuthentication();
         }
         catch (IOException e) {
+            e.printStackTrace();
+
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Dialog");
             alert.setHeaderText(null);
@@ -103,12 +101,11 @@ public class UI extends Application {
                             ListView<String> songAndArtistList = new ListView<String>();
                             ObservableList<String> songAndArtists = FXCollections.observableArrayList();
 
-                            // Get track names and add them into items
                             for (int i = 0; i < tracks.length; i++) {
                                 StringBuilder artistNames = new StringBuilder();
                                 artistNames.append(tracks[i].getTrack().getName() + " - ");
                                 ArtistSimplified[] artistArray = tracks[i].getTrack().getArtists();
-
+                                // Get artist name and append it to the song name separated by commas
                                 for (int index = 0; index < artistArray.length; index++) {
                                     artistNames.append(artistArray[index].getName());
 
@@ -116,7 +113,6 @@ public class UI extends Application {
                                         artistNames.append(", ");
                                     }
                                 }
-
                                 songAndArtists.add(artistNames.toString());
                             }
 
@@ -149,6 +145,7 @@ public class UI extends Application {
                             primaryStage.show();
                         }
                         catch (IOException | SpotifyWebApiException ex) {
+                            ex.printStackTrace();
                             Alert alert = new Alert(Alert.AlertType.ERROR);
                             alert.setTitle("Error Dialog");
                             alert.setHeaderText(null);
@@ -160,16 +157,19 @@ public class UI extends Application {
                         // Happens when there is no songs in the generated palylist
                         catch (NullPointerException n)
                         {
+                            n.printStackTrace();
                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
                             alert.setTitle("No Songs generated");
                             alert.setHeaderText(null);
-                            alert.setContentText("There were no songs generated in playlist. Please try again.");
+                            alert.setContentText("There were no songs generated in playlist. Try generating a playlist and" +
+                                    "add songs in it and come back");
 
                             alert.showAndWait();
                         }
                     });
 
                 } catch (IOException | SpotifyWebApiException ex) {
+                    ex.printStackTrace();
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error Dialog");
                     alert.setHeaderText(null);
