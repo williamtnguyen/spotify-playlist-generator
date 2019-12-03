@@ -1,4 +1,5 @@
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
+import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
 import com.wrapper.spotify.model_objects.specification.PlaylistTrack;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -8,16 +9,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
+import javafx.scene.layout.*;
+import javafx.scene.text.*;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class UI extends Application {
@@ -43,8 +37,16 @@ public class UI extends Application {
         // Opens default browser for spotify login
         try {
             programManager.openBrowserForAuthentication();
-        } catch (IOException e) {
-            //TODO: create warning box
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText(null);
+            alert.setContentText("An error has occured. Please try again later");
+
+            alert.showAndWait();
         }
 
         // Begins to authenticate user and brings user to the next scene if authentication passes
@@ -64,7 +66,7 @@ public class UI extends Application {
                     moodSlider.setMin(0);
                     moodSlider.setMax(1);
                     moodSlider.setValue(0.5);
-                    moodSlider.setShowTickLabels(true);
+                    moodSlider.setShowTickLabels(true );
                     moodSlider.setShowTickMarks(true);
                     moodSlider.setMajorTickUnit(0.5);
                     moodSlider.setBlockIncrement(0.1);
@@ -96,34 +98,84 @@ public class UI extends Application {
                             PlaylistTrack[] tracks = programManager.generatePlayList(moodSlider.getValue());
 
                             // Initialize data structures for listing track names
-                            ListView<String> list = new ListView<String>();
-                            ObservableList<String> items = FXCollections.observableArrayList();
+                            ListView<String> songAndArtistList = new ListView<String>();
+                            ObservableList<String> songAndArtists = FXCollections.observableArrayList();
 
-                            // Get track names and add them into items
                             for (int i = 0; i < tracks.length; i++) {
-                                items.add(tracks[i].getTrack().getName());
+                                StringBuilder artistNames = new StringBuilder();
+                                artistNames.append(tracks[i].getTrack().getName() + " - ");
+                                ArtistSimplified[] artistArray = tracks[i].getTrack().getArtists();
+                                // Get artist name and append it to the song name separated by commas
+                                for (int index = 0; index < artistArray.length; index++) {
+                                    artistNames.append(artistArray[index].getName());
+
+                                    if (index != artistArray.length - 1) {
+                                        artistNames.append(", ");
+                                    }
+                                }
+                                songAndArtists.add(artistNames.toString());
                             }
 
-                            list.setItems(items);
+                            songAndArtistList.setItems(songAndArtists);
 
-                            // Create StackPane layout and add the list of track names into it
-                            StackPane root = new StackPane();
-                            root.getChildren().add(list);
+                            Text header = new Text("Enjoy your personalized playlist!");
+                            header.setFont(Font.font("Tahoma", FontPosture.ITALIC, 30));
+                            Button goBackBtn = new Button("Create another playlist");
+
+                            goBackBtn.setOnAction(goBack -> {
+                                primaryStage.setScene(mainScene);
+                                primaryStage.show();
+                            });
+
+                            // Create BorderPane layout and add the all elements into it
+                            BorderPane borderPane = new BorderPane();
+                            borderPane.setTop(header);
+                            borderPane.setAlignment(header, Pos.CENTER);
+                            BorderPane.setMargin(header, new Insets(10));
+                            borderPane.setRight(goBackBtn);
+                            borderPane.setAlignment(goBackBtn, Pos.CENTER);
+                            BorderPane.setMargin(goBackBtn, new Insets(10));
+                            borderPane.setCenter(songAndArtistList);
+                            BorderPane.setMargin(songAndArtistList, new Insets(10));
 
                             // Create a scene for displaying the track names and display it in primaryStage
-                            Scene playlistScene = new Scene(root, 720, 350);
+                            Scene playlistScene = new Scene(borderPane, 720, 350);
                             primaryStage.setTitle("Generated Playlist");
                             primaryStage.setScene(playlistScene);
                             primaryStage.show();
-                        } catch (IOException | SpotifyWebApiException ex) {
+                        }
+                        catch (IOException | SpotifyWebApiException ex) {
                             ex.printStackTrace();
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error Dialog");
+                            alert.setHeaderText(null);
+                            alert.setContentText("An error has occured. Please try again later");
+
+                            alert.showAndWait();
                         }
 
+                        // Happens when there is no songs in the generated palylist
+                        catch (NullPointerException n)
+                        {
+                            n.printStackTrace();
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("No Songs generated");
+                            alert.setHeaderText(null);
+                            alert.setContentText("There were no songs generated in playlist. Try generating a playlist and" +
+                                    "add songs in it and come back");
+
+                            alert.showAndWait();
+                        }
                     });
 
                 } catch (IOException | SpotifyWebApiException ex) {
-                    // TODO: create warning box
                     ex.printStackTrace();
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error Dialog");
+                    alert.setHeaderText(null);
+                    alert.setContentText("An error has occured. Please try again later");
+
+                    alert.showAndWait();
                 }
             }
         });

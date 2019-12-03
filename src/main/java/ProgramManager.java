@@ -1,15 +1,11 @@
-import com.neovisionaries.i18n.CountryCode;
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.SpotifyHttpManager;
-import com.wrapper.spotify.enums.ModelObjectType;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 import com.wrapper.spotify.model_objects.specification.*;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRefreshRequest;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
-import com.wrapper.spotify.requests.data.personalization.GetUsersTopArtistsAndTracksRequest;
-import com.wrapper.spotify.requests.data.personalization.simplified.GetUsersTopArtistsRequest;
 
 import java.awt.*;
 import java.io.IOException;
@@ -82,7 +78,7 @@ public class ProgramManager {
     // Opens the user's default browser for authentication
     public void openBrowserForAuthentication() throws IOException {
         // Create authorization request and uri link
-        authorizationCodeUriRequest = spotifyapi.authorizationCodeUri().scope("playlist-read-private,user-top-read\n").build();
+        authorizationCodeUriRequest = spotifyapi.authorizationCodeUri().scope("playlist-read-private,user-top-read,playlist-modify\n").build();
         URI uri = authorizationCodeUriRequest.execute();
 
         // Opens the redirect URI
