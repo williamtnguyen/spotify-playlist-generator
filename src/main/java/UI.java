@@ -9,18 +9,13 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
+import javafx.scene.text.*;
 import javafx.stage.Stage;
 
 import javax.print.DocFlavor;
+import javax.swing.*;
 import java.io.IOException;
 
 public class UI extends Application {
@@ -46,8 +41,14 @@ public class UI extends Application {
         // Opens default browser for spotify login
         try {
             programManager.openBrowserForAuthentication();
-        } catch (IOException e) {
-            //TODO: create warning box
+        }
+        catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText(null);
+            alert.setContentText("An error has occured. Please try again later");
+
+            alert.showAndWait();
         }
 
         // Begins to authenticate user and brings user to the next scene if authentication passes
@@ -102,7 +103,6 @@ public class UI extends Application {
                             ListView<String> songAndArtistList = new ListView<String>();
                             ObservableList<String> songAndArtists = FXCollections.observableArrayList();
 
-                            // Get track names and add them into items
                             for (int i = 0; i < tracks.length; i++) {
                                 StringBuilder artistNames = new StringBuilder();
                                 artistNames.append(tracks[i].getTrack().getName() + " - ");
@@ -110,6 +110,7 @@ public class UI extends Application {
                                 // Get artist name and append it to the song name separated by commas
                                 for (int index = 0; index < artistArray.length; index++) {
                                     artistNames.append(artistArray[index].getName());
+
                                     if (index != artistArray.length - 1) {
                                         artistNames.append(", ");
                                     }
@@ -119,25 +120,60 @@ public class UI extends Application {
 
                             songAndArtistList.setItems(songAndArtists);
 
-                            // Create StackPane layout and add the list of track names into it
-                            StackPane stackPane = new StackPane();
-                            stackPane.getChildren().add(songAndArtistList);
+                            Text header = new Text("Enjoy your personalized playlist!");
+                            header.setFont(Font.font("Tahoma", FontPosture.ITALIC, 30));
+                            Button goBackBtn = new Button("Create another playlist");
+
+                            goBackBtn.setOnAction(goBack -> {
+                                primaryStage.setScene(mainScene);
+                                primaryStage.show();
+                            });
+
+                            // Create BorderPane layout and add the all elements into it
+                            BorderPane borderPane = new BorderPane();
+                            borderPane.setTop(header);
+                            borderPane.setAlignment(header, Pos.CENTER);
+                            BorderPane.setMargin(header, new Insets(10));
+                            borderPane.setRight(goBackBtn);
+                            borderPane.setAlignment(goBackBtn, Pos.CENTER);
+                            BorderPane.setMargin(goBackBtn, new Insets(10));
+                            borderPane.setCenter(songAndArtistList);
+                            BorderPane.setMargin(songAndArtistList, new Insets(10));
 
                             // Create a scene for displaying the track names and display it in primaryStage
-                            Scene playlistScene = new Scene(stackPane, 720, 350);
+                            Scene playlistScene = new Scene(borderPane, 720, 350);
                             primaryStage.setTitle("Generated Playlist");
                             primaryStage.setScene(playlistScene);
                             primaryStage.show();
+                        }
+                        catch (IOException | SpotifyWebApiException ex) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error Dialog");
+                            alert.setHeaderText(null);
+                            alert.setContentText("An error has occured. Please try again later");
 
-                        } catch (IOException | SpotifyWebApiException ex) {
-                            ex.printStackTrace();
+                            alert.showAndWait();
                         }
 
+                        // Happens when there is no songs in the generated palylist
+                        catch (NullPointerException n)
+                        {
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("No Songs generated");
+                            alert.setHeaderText(null);
+                            alert.setContentText("There were no songs generated in playlist. Please try again.");
+
+                            alert.showAndWait();
+                        }
                     });
 
                 } catch (IOException | SpotifyWebApiException ex) {
-                    // TODO: create warning box
-                    ex.printStackTrace();
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error Dialog");
+                    alert.setHeaderText(null);
+                    alert.setContentText("An error has occured. Please try again later");
+
+                    alert.showAndWait();
                 }
             }
         });
