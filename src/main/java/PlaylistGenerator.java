@@ -7,7 +7,6 @@ import com.wrapper.spotify.requests.data.tracks.GetAudioFeaturesForSeveralTracks
 import com.wrapper.spotify.requests.data.users_profile.GetCurrentUsersProfileRequest;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

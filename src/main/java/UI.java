@@ -10,12 +10,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
-
-import javax.print.DocFlavor;
-import javax.swing.*;
 import java.io.IOException;
 
 public class UI extends Application {
@@ -43,6 +39,8 @@ public class UI extends Application {
             programManager.openBrowserForAuthentication();
         }
         catch (IOException e) {
+            e.printStackTrace();
+
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Dialog");
             alert.setHeaderText(null);
@@ -147,6 +145,7 @@ public class UI extends Application {
                             primaryStage.show();
                         }
                         catch (IOException | SpotifyWebApiException ex) {
+                            ex.printStackTrace();
                             Alert alert = new Alert(Alert.AlertType.ERROR);
                             alert.setTitle("Error Dialog");
                             alert.setHeaderText(null);
@@ -158,6 +157,7 @@ public class UI extends Application {
                         // Happens when there is no songs in the generated palylist
                         catch (NullPointerException n)
                         {
+                            n.printStackTrace();
                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
                             alert.setTitle("No Songs generated");
                             alert.setHeaderText(null);
@@ -168,6 +168,7 @@ public class UI extends Application {
                     });
 
                 } catch (IOException | SpotifyWebApiException ex) {
+                    ex.printStackTrace();
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error Dialog");
                     alert.setHeaderText(null);
