@@ -161,7 +161,8 @@ public class UI extends Application {
                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
                             alert.setTitle("No Songs generated");
                             alert.setHeaderText(null);
-                            alert.setContentText("There were no songs generated in playlist. Please try again.");
+                            alert.setContentText("There were no songs generated in playlist. Try generating a playlist and" +
+                                    "add songs in it and come back");
 
                             alert.showAndWait();
                         }
