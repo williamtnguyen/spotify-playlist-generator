@@ -78,7 +78,7 @@ public class ProgramManager {
     // Opens the user's default browser for authentication
     public void openBrowserForAuthentication() throws IOException {
         // Create authorization request and uri link
-        authorizationCodeUriRequest = spotifyapi.authorizationCodeUri().scope("playlist-read-private,user-top-read\n").build();
+        authorizationCodeUriRequest = spotifyapi.authorizationCodeUri().scope("playlist-read-private,user-top-read,playlist-modify\n").build();
         URI uri = authorizationCodeUriRequest.execute();
 
         // Opens the redirect URI
