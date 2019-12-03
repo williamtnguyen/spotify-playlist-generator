@@ -118,14 +118,16 @@ public class PlaylistGenerator {
         com.wrapper.spotify.model_objects.specification.User user = getCurrentUsersProfile.execute();
         String userID = user.getId();
 
-        Playlist newPlaylist = spotifyApi.createPlaylist(userID, "MoodTape: ".concat(String.format("%.2f", mood))).build().execute();
-        playlistID = newPlaylist.getId();
-        Collections.shuffle(selectedSongURIs);
-        // here we need to convert the arraylist to an array bc
-        // this method below vvv requires an array of URI Strings (ie, String[])
-        spotifyApi.addTracksToPlaylist(playlistID, selectedSongURIs.toArray(new String[selectedSongURIs.size()]))
-                .build()
-                .execute();
+        if (selectedSongURIs.size() > 0) {
+            Playlist newPlaylist = spotifyApi.createPlaylist(userID, "MoodTape: ".concat(String.format("%.2f", mood))).build().execute();
+            playlistID = newPlaylist.getId();
+            Collections.shuffle(selectedSongURIs);
+            // here we need to convert the arraylist to an array bc
+            // this method below vvv requires an array of URI Strings (ie, String[])
+            spotifyApi.addTracksToPlaylist(playlistID, selectedSongURIs.toArray(new String[selectedSongURIs.size()]))
+                    .build()
+                    .execute();
+        }
     }
 
     /* Supplementary Methods */
