@@ -153,7 +153,13 @@ public class UI extends Application {
                                                 artistNames.append(", ");
                                             }
                                         }
-                                        songAndArtists.add(artistNames.toString());
+
+                                        // Adds songs and artists into ObservableList if song and artist isn't already added
+                                        String songAndArtistString = artistNames.toString();
+                                        if (!songAndArtists.contains(songAndArtistString))
+                                        {
+                                            songAndArtists.add(artistNames.toString());
+                                        }
                                     }
 
                                     songAndArtistList.setItems(songAndArtists);
