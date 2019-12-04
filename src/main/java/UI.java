@@ -65,6 +65,8 @@ public class UI extends Application {
                     Button generatePlaylistBtn = new Button("Generate Playlist");
                     title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
+                    Button generateTopListensBtn = new Button("Generate Top Listens");
+
                     // Create the slider from 0 - 1
                     Slider moodSlider = new Slider();
                     moodSlider.setMin(0);
@@ -79,6 +81,7 @@ public class UI extends Application {
                     grid.add(title, 0, 0, 2, 1);
                     grid.add(moodSlider,0,1);
                     grid.add(generatePlaylistBtn,0,2);
+                    grid.add(generateTopListensBtn,0,3);
 
                     StackPane root = new StackPane();
 
@@ -90,6 +93,7 @@ public class UI extends Application {
                     GridPane.setHalignment(title, HPos.CENTER);
                     GridPane.setHalignment(moodSlider, HPos.CENTER);
                     GridPane.setHalignment(generatePlaylistBtn, HPos.CENTER);
+                    GridPane.setHalignment(generateTopListensBtn, HPos.CENTER);
                     grid.setPadding(new Insets(25, 25, 25, 25));
 
                     root.getChildren().add(grid);
@@ -210,6 +214,117 @@ public class UI extends Application {
 
                             alert.showAndWait();
                         }
+                    });
+
+                    generateTopListensBtn.setOnAction(a -> {
+                            try {
+                                ProgressIndicator pi = new ProgressIndicator();
+                                VBox box = new VBox(pi);
+                                box.setAlignment(Pos.CENTER);
+
+                                // Grey Background
+                                title.setOpacity(0.4);
+                                grid.setDisable(true);
+                                root.getChildren().add(box);
+
+                                Task<PlaylistTrack[]> task = new Task<>() {
+                                    @Override
+                                    protected PlaylistTrack[] call() throws Exception {
+                                        return programManager.generatePlaylistTopListens();
+                                    }
+                                };
+
+                                task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                                    @Override
+                                    public void handle(WorkerStateEvent t) {
+                                        PlaylistTrack[] tracks = new PlaylistTrack[0];
+                                        try {
+                                            tracks = task.get();
+                                        }
+                                        catch (InterruptedException | ExecutionException ex) {
+                                            ex.printStackTrace();
+                                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                                            alert.setTitle("Error Dialog");
+                                            alert.setHeaderText(null);
+                                            alert.setContentText("An error has occurred while creating your playlist. " +
+                                                    "Please try again later");
+
+                                            alert.showAndWait();
+                                        }
+
+                                        ListView<String> songAndArtistList = new ListView<String>();
+                                        ObservableList<String> songAndArtists = FXCollections.observableArrayList();
+
+                                        for (int i = 0; i < tracks.length; i++) {
+                                            StringBuilder artistNames = new StringBuilder();
+                                            artistNames.append(tracks[i].getTrack().getName() + " - ");
+                                            ArtistSimplified[] artistArray = tracks[i].getTrack().getArtists();
+                                            // Get artist name and append it to the song name separated by commas
+                                            for (int index = 0; index < artistArray.length; index++) {
+                                                artistNames.append(artistArray[index].getName());
+
+                                                if (index != artistArray.length - 1) {
+                                                    artistNames.append(", ");
+                                                }
+                                            }
+
+                                            // Adds songs and artists into ObservableList if song and artist isn't already added
+                                            String songAndArtistString = artistNames.toString();
+                                            if (!songAndArtists.contains(songAndArtistString))
+                                            {
+                                                songAndArtists.add(artistNames.toString());
+                                            }
+                                        }
+
+                                        songAndArtistList.setItems(songAndArtists);
+
+                                        Text header = new Text("Enjoy your personalized playlist!");
+                                        header.setFont(Font.font("Tahoma", FontPosture.ITALIC, 30));
+                                        Button goBackBtn = new Button("Create another playlist");
+
+                                        goBackBtn.setOnAction(goBack -> {
+                                            title.setOpacity(1.0);
+                                            grid.setDisable(false);
+                                            root.getChildren().remove(box);
+
+                                            primaryStage.setScene(mainScene);
+                                            primaryStage.show();
+                                        });
+
+                                        // Create BorderPane layout and add the all elements into it
+                                        BorderPane borderPane = new BorderPane();
+                                        borderPane.setTop(header);
+                                        borderPane.setAlignment(header, Pos.CENTER);
+                                        BorderPane.setMargin(header, new Insets(10));
+                                        borderPane.setRight(goBackBtn);
+                                        borderPane.setAlignment(goBackBtn, Pos.CENTER);
+                                        BorderPane.setMargin(goBackBtn, new Insets(10));
+                                        borderPane.setCenter(songAndArtistList);
+                                        BorderPane.setMargin(songAndArtistList, new Insets(10));
+
+                                        // Create a scene for displaying the track names and display it in primaryStage
+                                        Scene playlistScene = new Scene(borderPane, 720, 350);
+                                        primaryStage.setTitle("Generated Playlist");
+                                        primaryStage.setScene(playlistScene);
+                                        primaryStage.show();
+
+                                    }
+                                });
+
+                                new Thread(task).start();
+                            }
+                            // Happens when there is no songs in the generated palylist
+                            catch (NullPointerException n)
+                            {
+                                n.printStackTrace();
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setTitle("No Songs generated");
+                                alert.setHeaderText(null);
+                                alert.setContentText("There were no songs generated in playlist. Try generating a playlist and" +
+                                        "add songs in it and come back");
+
+                                alert.showAndWait();
+                            }
                     });
 
                 } catch (IOException | SpotifyWebApiException ex) {
