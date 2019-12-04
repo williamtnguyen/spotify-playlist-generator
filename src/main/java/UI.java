@@ -4,6 +4,9 @@ import com.wrapper.spotify.model_objects.specification.PlaylistTrack;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,6 +16,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 public class UI extends Application {
     private Button submitBtn;
@@ -76,6 +80,8 @@ public class UI extends Application {
                     grid.add(moodSlider,0,1);
                     grid.add(generatePlaylistBtn,0,2);
 
+                    StackPane root = new StackPane();
+
                     // Set center all elements and padding
                     GridPane.setHgrow(moodSlider, Priority.ALWAYS);
                     grid.setAlignment(Pos.CENTER);
@@ -86,8 +92,10 @@ public class UI extends Application {
                     GridPane.setHalignment(generatePlaylistBtn, HPos.CENTER);
                     grid.setPadding(new Insets(25, 25, 25, 25));
 
+                    root.getChildren().add(grid);
+
                     // Create a scene for user to input mood value
-                    Scene mainScene = new Scene(grid, 720, 350);
+                    Scene mainScene = new Scene(root, 720, 350);
                     primaryStage.setTitle("Set mood");
                     primaryStage.setScene(mainScene);
                     primaryStage.show();
@@ -95,65 +103,145 @@ public class UI extends Application {
                     // Start creating a playlist when generate playlist button is clicked
                     generatePlaylistBtn.setOnAction(a -> {
                         try {
-                            PlaylistTrack[] tracks = programManager.generatePlayList(moodSlider.getValue());
+                            ProgressIndicator pi = new ProgressIndicator();
+                            VBox box = new VBox(pi);
+                            box.setAlignment(Pos.CENTER);
 
-                            // Initialize data structures for listing track names
-                            ListView<String> songAndArtistList = new ListView<String>();
-                            ObservableList<String> songAndArtists = FXCollections.observableArrayList();
+                            // Grey Background
+                            title.setOpacity(0.4);
+                            grid.setDisable(true);
+                            root.getChildren().add(box);
 
-                            for (int i = 0; i < tracks.length; i++) {
-                                StringBuilder artistNames = new StringBuilder();
-                                artistNames.append(tracks[i].getTrack().getName() + " - ");
-                                ArtistSimplified[] artistArray = tracks[i].getTrack().getArtists();
-                                // Get artist name and append it to the song name separated by commas
-                                for (int index = 0; index < artistArray.length; index++) {
-                                    artistNames.append(artistArray[index].getName());
 
-                                    if (index != artistArray.length - 1) {
-                                        artistNames.append(", ");
-                                    }
+                            Task<PlaylistTrack[]> task = new Task<>() {
+                                @Override
+                                protected PlaylistTrack[] call() throws Exception {
+                                    return programManager.generatePlayList(moodSlider.getValue());
                                 }
-                                songAndArtists.add(artistNames.toString());
-                            }
+                            };
 
-                            songAndArtistList.setItems(songAndArtists);
+                            task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                                @Override
+                                public void handle(WorkerStateEvent t) {
+                                    PlaylistTrack[] tracks = new PlaylistTrack[0];
+                                    try {
+                                        tracks = task.get();
+                                    }
+                                    catch (InterruptedException | ExecutionException ex) {
+                                        ex.printStackTrace();
+                                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                                        alert.setTitle("Error Dialog");
+                                        alert.setHeaderText(null);
+                                        alert.setContentText("An error has occurred while creating your playlist. " +
+                                                "Please try again later");
 
-                            Text header = new Text("Enjoy your personalized playlist!");
-                            header.setFont(Font.font("Tahoma", FontPosture.ITALIC, 30));
-                            Button goBackBtn = new Button("Create another playlist");
+                                        alert.showAndWait();
+                                    }
 
-                            goBackBtn.setOnAction(goBack -> {
-                                primaryStage.setScene(mainScene);
-                                primaryStage.show();
+                                    ListView<String> songAndArtistList = new ListView<String>();
+                                    ObservableList<String> songAndArtists = FXCollections.observableArrayList();
+
+                                    for (int i = 0; i < tracks.length; i++) {
+                                        StringBuilder artistNames = new StringBuilder();
+                                        artistNames.append(tracks[i].getTrack().getName() + " - ");
+                                        ArtistSimplified[] artistArray = tracks[i].getTrack().getArtists();
+                                        // Get artist name and append it to the song name separated by commas
+                                        for (int index = 0; index < artistArray.length; index++) {
+                                            artistNames.append(artistArray[index].getName());
+
+                                            if (index != artistArray.length - 1) {
+                                                artistNames.append(", ");
+                                            }
+                                        }
+                                        songAndArtists.add(artistNames.toString());
+                                    }
+
+                                    songAndArtistList.setItems(songAndArtists);
+
+                                    Text header = new Text("Enjoy your personalized playlist!");
+                                    header.setFont(Font.font("Tahoma", FontPosture.ITALIC, 30));
+                                    Button goBackBtn = new Button("Create another playlist");
+
+                                    goBackBtn.setOnAction(goBack -> {
+                                        title.setOpacity(1.0);
+                                        grid.setDisable(false);
+                                        root.getChildren().remove(box);
+
+                                        primaryStage.setScene(mainScene);
+                                        primaryStage.show();
+                                    });
+
+                                    // Create BorderPane layout and add the all elements into it
+                                    BorderPane borderPane = new BorderPane();
+                                    borderPane.setTop(header);
+                                    borderPane.setAlignment(header, Pos.CENTER);
+                                    BorderPane.setMargin(header, new Insets(10));
+                                    borderPane.setRight(goBackBtn);
+                                    borderPane.setAlignment(goBackBtn, Pos.CENTER);
+                                    BorderPane.setMargin(goBackBtn, new Insets(10));
+                                    borderPane.setCenter(songAndArtistList);
+                                    BorderPane.setMargin(songAndArtistList, new Insets(10));
+
+                                    // Create a scene for displaying the track names and display it in primaryStage
+                                    Scene playlistScene = new Scene(borderPane, 720, 350);
+                                    primaryStage.setTitle("Generated Playlist");
+                                    primaryStage.setScene(playlistScene);
+                                    primaryStage.show();
+
+                                }
                             });
 
-                            // Create BorderPane layout and add the all elements into it
-                            BorderPane borderPane = new BorderPane();
-                            borderPane.setTop(header);
-                            borderPane.setAlignment(header, Pos.CENTER);
-                            BorderPane.setMargin(header, new Insets(10));
-                            borderPane.setRight(goBackBtn);
-                            borderPane.setAlignment(goBackBtn, Pos.CENTER);
-                            BorderPane.setMargin(goBackBtn, new Insets(10));
-                            borderPane.setCenter(songAndArtistList);
-                            BorderPane.setMargin(songAndArtistList, new Insets(10));
+                            new Thread(task).start();
 
-                            // Create a scene for displaying the track names and display it in primaryStage
-                            Scene playlistScene = new Scene(borderPane, 720, 350);
-                            primaryStage.setTitle("Generated Playlist");
-                            primaryStage.setScene(playlistScene);
-                            primaryStage.show();
+//                            PlaylistTrack[] tracks = programManager.generatePlayList(moodSlider.getValue());
+
+                            // Initialize data structures for listing track names
+//                            ListView<String> songAndArtistList = new ListView<String>();
+//                            ObservableList<String> songAndArtists = FXCollections.observableArrayList();
+//
+//                            for (int i = 0; i < tracks.length; i++) {
+//                                StringBuilder artistNames = new StringBuilder();
+//                                artistNames.append(tracks[i].getTrack().getName() + " - ");
+//                                ArtistSimplified[] artistArray = tracks[i].getTrack().getArtists();
+//                                // Get artist name and append it to the song name separated by commas
+//                                for (int index = 0; index < artistArray.length; index++) {
+//                                    artistNames.append(artistArray[index].getName());
+//
+//                                    if (index != artistArray.length - 1) {
+//                                        artistNames.append(", ");
+//                                    }
+//                                }
+//                                songAndArtists.add(artistNames.toString());
+//                            }
+//
+//                            songAndArtistList.setItems(songAndArtists);
+//
+//                            Text header = new Text("Enjoy your personalized playlist!");
+//                            header.setFont(Font.font("Tahoma", FontPosture.ITALIC, 30));
+//                            Button goBackBtn = new Button("Create another playlist");
+//
+//                            goBackBtn.setOnAction(goBack -> {
+//                                primaryStage.setScene(mainScene);
+//                                primaryStage.show();
+//                            });
+//
+//                            // Create BorderPane layout and add the all elements into it
+//                            BorderPane borderPane = new BorderPane();
+//                            borderPane.setTop(header);
+//                            borderPane.setAlignment(header, Pos.CENTER);
+//                            BorderPane.setMargin(header, new Insets(10));
+//                            borderPane.setRight(goBackBtn);
+//                            borderPane.setAlignment(goBackBtn, Pos.CENTER);
+//                            BorderPane.setMargin(goBackBtn, new Insets(10));
+//                            borderPane.setCenter(songAndArtistList);
+//                            BorderPane.setMargin(songAndArtistList, new Insets(10));
+//
+//                            // Create a scene for displaying the track names and display it in primaryStage
+//                            Scene playlistScene = new Scene(borderPane, 720, 350);
+//                            primaryStage.setTitle("Generated Playlist");
+//                            primaryStage.setScene(playlistScene);
+//                            primaryStage.show();
                         }
-                        catch (IOException | SpotifyWebApiException ex) {
-                            ex.printStackTrace();
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Error Dialog");
-                            alert.setHeaderText(null);
-                            alert.setContentText("An error has occured. Please try again later");
-
-                            alert.showAndWait();
-                        }
-
                         // Happens when there is no songs in the generated palylist
                         catch (NullPointerException n)
                         {
