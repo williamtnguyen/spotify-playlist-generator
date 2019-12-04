@@ -112,7 +112,6 @@ public class UI extends Application {
                             grid.setDisable(true);
                             root.getChildren().add(box);
 
-
                             Task<PlaylistTrack[]> task = new Task<>() {
                                 @Override
                                 protected PlaylistTrack[] call() throws Exception {
@@ -198,55 +197,6 @@ public class UI extends Application {
                             });
 
                             new Thread(task).start();
-
-//                            PlaylistTrack[] tracks = programManager.generatePlayList(moodSlider.getValue());
-
-                            // Initialize data structures for listing track names
-//                            ListView<String> songAndArtistList = new ListView<String>();
-//                            ObservableList<String> songAndArtists = FXCollections.observableArrayList();
-//
-//                            for (int i = 0; i < tracks.length; i++) {
-//                                StringBuilder artistNames = new StringBuilder();
-//                                artistNames.append(tracks[i].getTrack().getName() + " - ");
-//                                ArtistSimplified[] artistArray = tracks[i].getTrack().getArtists();
-//                                // Get artist name and append it to the song name separated by commas
-//                                for (int index = 0; index < artistArray.length; index++) {
-//                                    artistNames.append(artistArray[index].getName());
-//
-//                                    if (index != artistArray.length - 1) {
-//                                        artistNames.append(", ");
-//                                    }
-//                                }
-//                                songAndArtists.add(artistNames.toString());
-//                            }
-//
-//                            songAndArtistList.setItems(songAndArtists);
-//
-//                            Text header = new Text("Enjoy your personalized playlist!");
-//                            header.setFont(Font.font("Tahoma", FontPosture.ITALIC, 30));
-//                            Button goBackBtn = new Button("Create another playlist");
-//
-//                            goBackBtn.setOnAction(goBack -> {
-//                                primaryStage.setScene(mainScene);
-//                                primaryStage.show();
-//                            });
-//
-//                            // Create BorderPane layout and add the all elements into it
-//                            BorderPane borderPane = new BorderPane();
-//                            borderPane.setTop(header);
-//                            borderPane.setAlignment(header, Pos.CENTER);
-//                            BorderPane.setMargin(header, new Insets(10));
-//                            borderPane.setRight(goBackBtn);
-//                            borderPane.setAlignment(goBackBtn, Pos.CENTER);
-//                            BorderPane.setMargin(goBackBtn, new Insets(10));
-//                            borderPane.setCenter(songAndArtistList);
-//                            BorderPane.setMargin(songAndArtistList, new Insets(10));
-//
-//                            // Create a scene for displaying the track names and display it in primaryStage
-//                            Scene playlistScene = new Scene(borderPane, 720, 350);
-//                            primaryStage.setTitle("Generated Playlist");
-//                            primaryStage.setScene(playlistScene);
-//                            primaryStage.show();
                         }
                         // Happens when there is no songs in the generated palylist
                         catch (NullPointerException n)
