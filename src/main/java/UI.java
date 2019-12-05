@@ -120,15 +120,18 @@ public class UI extends Application {
                                 }
                             };
 
+                            // Usually happens when mood = 0
                             task.setOnFailed(new EventHandler<WorkerStateEvent>() {
                                 @Override
                                 public void handle(WorkerStateEvent t) {
+                                    // Display error window with text
                                     Alert alert = new Alert(Alert.AlertType.ERROR);
                                     alert.setTitle("Error Dialog");
                                     alert.setHeaderText(null);
                                     alert.setContentText("An error has occurred while creating your playlist. " +
                                             "Try to set a different mood");
 
+                                    // Revert the previous scene to how it was previously
                                     alert.showAndWait();
                                     title.setOpacity(1.0);
                                     grid.setDisable(false);
