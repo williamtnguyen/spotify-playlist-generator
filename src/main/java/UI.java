@@ -16,6 +16,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
 public class UI extends Application {
@@ -119,6 +120,25 @@ public class UI extends Application {
                                 }
                             };
 
+                            task.setOnFailed(new EventHandler<WorkerStateEvent>() {
+                                @Override
+                                public void handle(WorkerStateEvent t) {
+                                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                                    alert.setTitle("Error Dialog");
+                                    alert.setHeaderText(null);
+                                    alert.setContentText("An error has occurred while creating your playlist. " +
+                                            "Try to set a different mood");
+
+                                    alert.showAndWait();
+                                    title.setOpacity(1.0);
+                                    grid.setDisable(false);
+                                    root.getChildren().remove(box);
+
+                                    primaryStage.setScene(mainScene);
+                                    primaryStage.show();
+                                }
+                            });
+
                             task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
                                 @Override
                                 public void handle(WorkerStateEvent t) {
@@ -136,6 +156,8 @@ public class UI extends Application {
 
                                         alert.showAndWait();
                                     }
+
+                                    System.out.println(Arrays.deepToString(tracks));
 
                                     ListView<String> songAndArtistList = new ListView<String>();
                                     ObservableList<String> songAndArtists = FXCollections.observableArrayList();
@@ -198,7 +220,7 @@ public class UI extends Application {
 
                             new Thread(task).start();
                         }
-                        // Happens when there is no songs in the generated palylist
+                        // Happens when there is no songs in the generated playlist
                         catch (NullPointerException n)
                         {
                             n.printStackTrace();
