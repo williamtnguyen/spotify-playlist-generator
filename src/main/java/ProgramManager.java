@@ -93,6 +93,13 @@ public class ProgramManager {
         return playlistGenerator.getPlaylist();
     }
 
+    public PlaylistTrack[] generatePlaylistTopListens() throws IOException, SpotifyWebApiException {
+        ArrayList<String> topTracks = playlistGenerator.userTopListenedTracks();
+        playlistGenerator.createPlaylist(topTracks, "Top Listens");
+        return playlistGenerator.getPlaylist();
+    }
+
+
     public String getCode() {
         return this.code;
     }

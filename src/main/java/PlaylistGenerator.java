@@ -2,15 +2,16 @@ import com.neovisionaries.i18n.CountryCode;
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.specification.*;
+import com.wrapper.spotify.requests.data.personalization.GetUsersTopArtistsAndTracksRequest;
 import com.wrapper.spotify.requests.data.personalization.simplified.GetUsersTopArtistsRequest;
+import com.wrapper.spotify.requests.data.personalization.simplified.GetUsersTopTracksRequest;
 import com.wrapper.spotify.requests.data.tracks.GetAudioFeaturesForSeveralTracksRequest;
 import com.wrapper.spotify.requests.data.users_profile.GetCurrentUsersProfileRequest;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /*
     RESPONSIBILITIES:
@@ -42,6 +43,20 @@ public class PlaylistGenerator {
         }
         return topTracks;
     }
+
+    public ArrayList<String> userTopListenedTracks() throws IOException, SpotifyWebApiException {
+
+        GetUsersTopTracksRequest getUsersTopTracksRequest = spotifyApi.getUsersTopTracks().build();
+        Paging<Track> tracksPaging = getUsersTopTracksRequest.execute();
+        Track[] topTracksList = tracksPaging.getItems();
+        ArrayList<String> usersTopTracks = new ArrayList<>();
+        for (Track t : topTracksList){
+            usersTopTracks.add(t.getUri());
+        }
+        return usersTopTracks;
+
+    }
+
 
     /**
      * Step 2: Algorithm to create a list of Track URI's that suffice the mood-index
@@ -121,6 +136,25 @@ public class PlaylistGenerator {
             Playlist newPlaylist = spotifyApi.createPlaylist(userID, "MoodTape: ".concat(String.format("%.2f", mood))).build().execute();
             playlistID = newPlaylist.getId();
             Collections.shuffle(selectedSongURIs);
+            // here we need to convert the arraylist to an array bc
+            // this method below vvv requires an array of URI Strings (ie, String[])
+            spotifyApi.addTracksToPlaylist(playlistID, selectedSongURIs.toArray(new String[selectedSongURIs.size()]))
+                    .build()
+                    .execute();
+        }
+    }
+
+    public void createPlaylist(List<String> selectedSongURIs, String playlistName) throws IOException, SpotifyWebApiException {
+        GetCurrentUsersProfileRequest getCurrentUsersProfile = spotifyApi.getCurrentUsersProfile().build();
+        com.wrapper.spotify.model_objects.specification.User user = getCurrentUsersProfile.execute();
+        String userID = user.getId();
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+
+        if (selectedSongURIs.size() > 0) {
+            Playlist newPlaylist = spotifyApi.createPlaylist(userID, playlistName + ": " + date).build().execute();
+            playlistID = newPlaylist.getId();
             // here we need to convert the arraylist to an array bc
             // this method below vvv requires an array of URI Strings (ie, String[])
             spotifyApi.addTracksToPlaylist(playlistID, selectedSongURIs.toArray(new String[selectedSongURIs.size()]))
