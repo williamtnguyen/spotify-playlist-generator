@@ -15,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 
@@ -45,6 +46,7 @@ public class UI extends Application {
         urlLabel = new Label("After agreeing to authorize this app from your main browser, copy and paste the redirect URL into the textbox");
 
         textField = new TextField();
+        textField.setPromptText("Enter redirect URL here");
         programManager = new ProgramManager();
 
 
@@ -377,10 +379,12 @@ public class UI extends Application {
             }
         });
 
-        // Set layout and add elements to pane
+        // Set layout and elements that will be added to the pane
         GridPane grid = new GridPane();
         Text scenetitle = new Text("Welcome to Spotify Playlist");
-        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+
+        // Set css for scene title
+        scenetitle.setId("welcomeTitle");
 
         ImageView imView = new ImageView(banner);
         GridPane.setHalignment(imView, HPos.CENTER);
@@ -406,6 +410,7 @@ public class UI extends Application {
         // Set pane to scene, set scene into stage, and show stage
         // Note: stage = window and scene = panel
         Scene scene = new Scene(grid, 720, 350);
+        scene.getStylesheets().add("style.css");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
