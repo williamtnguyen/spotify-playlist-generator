@@ -24,10 +24,12 @@
     -fx-background-color: #1DB954;
     -fx-background-radius: 16.4, 15;
     -fx-background-insets: -1.4, 0;
-    -fx-text-fill: #FFFFFF;
+    -fx-text-fill: #FAFAFA;
     -fx-padding: 6 25 6 25;
     -fx-font-weight: bold;
 }
 
 .button:hover {
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: #21d15f;
 }
