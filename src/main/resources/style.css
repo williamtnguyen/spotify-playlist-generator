@@ -64,7 +64,9 @@
 
 .slider .thumb { -fx-padding: 8; }
 
-.slider { -fx-tick-label-fill: #FFFFFF; }
+.slider .axis .axis-tick-mark, .slider .axis .axis-minor-tick-mark { -fx-stroke: #FFFFFF; }
+
+.slider { -fx-font-size: 14px;}
 
 .list-cell {
     -fx-font: 13px Tahoma;
