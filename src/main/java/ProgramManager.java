@@ -54,17 +54,12 @@ public class ProgramManager {
 
         // Get the code from the redirect url
         code = redirectURL.getQuery().split("code=")[1];
-        System.out.println(code);
 
         // Retrieves access and refresh token and sets it in the spotifyapi variable in order to access user's spotify data
         authorizationCodeRequest = spotifyapi.authorizationCode(code).build();
         AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
         spotifyapi.setAccessToken(authorizationCodeCredentials.getAccessToken());
         spotifyapi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
-
-        System.out.println("Success! Authorization complete.");
-        System.out.println("Expires in: " + authorizationCodeCredentials.getExpiresIn());
-
 
          // Rest of this code doesn't need to be executed right away since we just created the access token
          // Set access and refresh token for further "spotifyApi" object usage

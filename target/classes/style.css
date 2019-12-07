@@ -1,16 +1,38 @@
-.root{
-    -fx-background: #191414;
+.root{ -fx-background: #191414; }
+
+@font-face {
+    src: url('resources/fonts/Proxima nova.ttf');
 }
 
-#welcomeTitle {
-    -fx-font-size: 25px;
+#moodTitle {
+    -fx-font-family: 'Proxima Nova Rg';
+    -fx-font-size: 30px;
     -fx-fill: #FFFFFF;
     -fx-stroke: #FFFFFF;
     -fx-stroke-width: 0;
 }
 
-.label {
-    -fx-font: 13px Tahoma;
+#enjoyPlayListTitle {
+    -fx-font-family: 'Proxima Nova Rg';
+    -fx-font-size: 30px;
+    -fx-fill: #FFFFFF;
+    -fx-stroke: #FFFFFF;
+    -fx-font-style: italic;
+    -fx-stroke-width: 0;
+}
+
+#welcomeTitle {
+    -fx-font-family: 'Proxima Nova Rg';
+    -fx-font-size: 30px;
+    -fx-fill: #FFFFFF;
+    -fx-stroke: #FFFFFF;
+    -fx-stroke-width: 0.1;
+}
+
+#welcomeDirections {
+    -fx-font-family: 'Proxima Nova Rg';
+    -fx-font-size: 14px;
+    -fx-fill: #FFFFFF;
     -fx-stroke: #FFFFFF;
     -fx-stroke-width: 0;
 }
@@ -21,11 +43,13 @@
 }
 
 .button {
+    -fx-font-family: 'Proxima Nova Rg';
+    -fx-font-size: 13px;
     -fx-background-color: #1DB954;
     -fx-background-radius: 16.4, 15;
     -fx-background-insets: -1.4, 0;
     -fx-text-fill: #FAFAFA;
-    -fx-padding: 6 25 6 25;
+    -fx-padding: 6 28 6 28;
     -fx-font-weight: bold;
 }
 
@@ -33,3 +57,47 @@
     -fx-text-fill: #FFFFFF;
     -fx-background-color: #21d15f;
 }
+
+.button:pressed { -fx-background-color: #1aa34a; }
+
+.slider .track { -fx-padding: 4; }
+
+.slider .thumb { -fx-padding: 8; }
+
+.slider { -fx-tick-label-fill: #FFFFFF; }
+
+.list-cell {
+    -fx-font: 13px Tahoma;
+    -fx-padding: 2px, 0, 2px, 0;
+    -fx-text-fill: white;
+    -fx-background: #191414;
+}
+
+.list-view {
+    -fx-background: #191414;
+    -fx-selection-bar: #191414 ;
+    -fx-selection-bar-non-focused: #191414 ;
+}
+
+.list-view .scroll-bar:horizontal .thumb,
+.list-view .scroll-bar:horizontal .increment-arrow,
+.list-view .scroll-bar:horizontal .decrement-arrow,
+.list-view .scroll-bar:vertical .thumb,
+.list-view .scroll-bar:vertical .increment-arrow,
+.list-view .scroll-bar:vertical .decrement-arrow  {
+    -fx-background-color: #535353;
+}
+
+.list-view .scroll-bar:horizontal .track,
+.list-view .scroll-bar:horizontal .increment-button,
+.list-view .scroll-bar:horizontal .decrement-button,
+.list-view .scroll-bar:vertical .track,
+.list-view .scroll-bar:vertical .increment-button,
+.list-view .scroll-bar:vertical .decrement-button,
+.list-view .corner {
+    -fx-padding: 2px;
+    -fx-background-color: #191414;
+}
+
+
+

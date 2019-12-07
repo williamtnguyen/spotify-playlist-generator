@@ -15,7 +15,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.shape.StrokeType;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 
@@ -23,7 +22,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
 public class UI extends Application {
@@ -76,10 +74,14 @@ public class UI extends Application {
                     ImageView imageView = new ImageView(banner);
 
                     Text title = new Text("What's your mood? (0: sad, 1: happy)");
-                    title.setId("welcomeTitle");
+                    title.setId("moodTitle");
+
                     GridPane grid = new GridPane();
+                    grid.setHgap(10);
+                    grid.setVgap(20);
+                    grid.setPadding(new Insets(25, 25, 25, 25));
+
                     Button generatePlaylistBtn = new Button("Generate Mood Playlist");
-                    title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
                     Button generateTopListensBtn = new Button("Generate Top Listens by Play Count");
 
@@ -105,19 +107,16 @@ public class UI extends Application {
                     // Set center all elements and padding
                     GridPane.setHgrow(moodSlider, Priority.ALWAYS);
                     grid.setAlignment(Pos.CENTER);
-                    grid.setHgap(10);
-                    grid.setVgap(10);
                     GridPane.setHalignment(imageView,HPos.CENTER);
                     GridPane.setHalignment(title, HPos.CENTER);
                     GridPane.setHalignment(moodSlider, HPos.CENTER);
                     GridPane.setHalignment(generatePlaylistBtn, HPos.CENTER);
                     GridPane.setHalignment(generateTopListensBtn, HPos.CENTER);
-                    grid.setPadding(new Insets(25, 25, 25, 25));
 
                     root.getChildren().add(grid);
 
                     // Create a scene for user to input mood value
-                    Scene mainScene = new Scene(root, 720, 350);
+                    Scene mainScene = new Scene(root, 750, 400);
                     mainScene.getStylesheets().add("style.css");
                     primaryStage.setTitle("Set mood");
                     primaryStage.setScene(mainScene);
@@ -182,8 +181,6 @@ public class UI extends Application {
                                         alert.showAndWait();
                                     }
 
-                                    System.out.println(Arrays.deepToString(tracks));
-
                                     ListView<String> songAndArtistList = new ListView<String>();
                                     ObservableList<String> songAndArtists = FXCollections.observableArrayList();
 
@@ -211,7 +208,7 @@ public class UI extends Application {
                                     songAndArtistList.setItems(songAndArtists);
 
                                     Text header = new Text("Enjoy your personalized playlist!");
-                                    header.setFont(Font.font("Tahoma", FontPosture.ITALIC, 30));
+                                    header.setId("enjoyPlayListTitle");
                                     Button goBackBtn = new Button("Create another playlist");
 
                                     goBackBtn.setOnAction(goBack -> {
@@ -225,6 +222,7 @@ public class UI extends Application {
 
                                     // Create BorderPane layout and add the all elements into it
                                     BorderPane borderPane = new BorderPane();
+                                    borderPane.getStylesheets().add("style.css");
                                     borderPane.setTop(header);
                                     borderPane.setAlignment(header, Pos.CENTER);
                                     BorderPane.setMargin(header, new Insets(10));
@@ -235,7 +233,7 @@ public class UI extends Application {
                                     BorderPane.setMargin(songAndArtistList, new Insets(10));
 
                                     // Create a scene for displaying the track names and display it in primaryStage
-                                    Scene playlistScene = new Scene(borderPane, 720, 350);
+                                    Scene playlistScene = new Scene(borderPane, 750, 400);
                                     primaryStage.setTitle("Generated Playlist");
                                     primaryStage.setScene(playlistScene);
                                     primaryStage.show();
@@ -322,7 +320,8 @@ public class UI extends Application {
                                         songAndArtistList.setItems(songAndArtists);
 
                                         Text header = new Text("Enjoy your personalized playlist!");
-                                        header.setFont(Font.font("Tahoma", FontPosture.ITALIC, 30));
+                                        header.setId("enjoyPlayListTitle");
+
                                         Button goBackBtn = new Button("Create another playlist");
 
                                         goBackBtn.setOnAction(goBack -> {
@@ -336,6 +335,7 @@ public class UI extends Application {
 
                                         // Create BorderPane layout and add the all elements into it
                                         BorderPane borderPane = new BorderPane();
+                                        borderPane.getStylesheets().add("style.css");
                                         borderPane.setTop(header);
                                         borderPane.setAlignment(header, Pos.CENTER);
                                         BorderPane.setMargin(header, new Insets(10));
@@ -346,11 +346,10 @@ public class UI extends Application {
                                         BorderPane.setMargin(songAndArtistList, new Insets(10));
 
                                         // Create a scene for displaying the track names and display it in primaryStage
-                                        Scene playlistScene = new Scene(borderPane, 720, 350);
+                                        Scene playlistScene = new Scene(borderPane, 750, 400);
                                         primaryStage.setTitle("Generated Playlist");
                                         primaryStage.setScene(playlistScene);
                                         primaryStage.show();
-
                                     }
                                 });
 
@@ -375,7 +374,7 @@ public class UI extends Application {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error Dialog");
                     alert.setHeaderText(null);
-                    alert.setContentText("An error has occured. Please try again later");
+                    alert.setContentText("Incorrect code. Please copy/paste again. If problem persists, reopen the app");
 
                     alert.showAndWait();
                 }
@@ -388,6 +387,11 @@ public class UI extends Application {
 
         // Set css for scene title
         scenetitle.setId("welcomeTitle");
+        urlLabel.setId("welcomeDirections");
+
+        // Set spacing between components
+        grid.setHgap(10);
+        grid.setVgap(20);
 
         ImageView imView = new ImageView(banner);
         GridPane.setHalignment(imView, HPos.CENTER);
@@ -397,10 +401,6 @@ public class UI extends Application {
         grid.add(scenetitle, 0, 1, 2, 1);
 
         grid.setAlignment(Pos.CENTER);
-
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(25, 25, 25, 25));
 
         GridPane.setHalignment(urlLabel,HPos.CENTER);
         GridPane.setHalignment(textField,HPos.CENTER);
@@ -412,9 +412,10 @@ public class UI extends Application {
 
         // Set pane to scene, set scene into stage, and show stage
         // Note: stage = window and scene = panel
-        Scene scene = new Scene(grid, 720, 350);
+        Scene scene = new Scene(grid, 750, 400);
         scene.getStylesheets().add("style.css");
         primaryStage.setScene(scene);
+        primaryStage.getIcons().add(new Image("spotify-icon.png"));
         primaryStage.show();
     }
 
