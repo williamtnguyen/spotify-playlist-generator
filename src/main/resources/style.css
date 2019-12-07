@@ -1,0 +1,33 @@
+.root{
+    -fx-background: #191414;
+}
+
+#welcomeTitle {
+    -fx-font-size: 25px;
+    -fx-fill: #FFFFFF;
+    -fx-stroke: #FFFFFF;
+    -fx-stroke-width: 0;
+}
+
+.label {
+    -fx-font: 13px Tahoma;
+    -fx-stroke: #FFFFFF;
+    -fx-stroke-width: 0;
+}
+
+.text-field {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 16.4, 15;
+}
+
+.button {
+    -fx-background-color: #1DB954;
+    -fx-background-radius: 16.4, 15;
+    -fx-background-insets: -1.4, 0;
+    -fx-text-fill: #FFFFFF;
+    -fx-padding: 6 25 6 25;
+    -fx-font-weight: bold;
+}
+
+.button:hover {
+}
