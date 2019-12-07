@@ -19,6 +19,10 @@ import javafx.scene.text.*;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
+<<<<<<< HEAD
+=======
+import java.io.FileNotFoundException;
+>>>>>>> alex
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
@@ -28,17 +32,20 @@ public class UI extends Application {
     private Label urlLabel;
     private TextField textField;
     private ProgramManager programManager;
+    private Image banner;
 
     /**
      * NOTE: Reformat later. Just want to get a basic UI working
      */
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws FileNotFoundException {
 
         // Initialize instance variables
         primaryStage.setTitle("Authentication");
         submitBtn = new Button("Submit");
+        banner = new Image(new FileInputStream(System.getProperty("user.dir") + "\\logo\\Spotify_Logo_RGB_Green.png"), 400,120,false,false);
         urlLabel = new Label("After agreeing to authorize this app from your main browser, copy and paste the redirect URL into the textbox");
+
         textField = new TextField();
         programManager = new ProgramManager();
 
@@ -65,8 +72,11 @@ public class UI extends Application {
                     programManager.authenticateUser(textField.getText());
 
                     // Create and initialize elements
+<<<<<<< HEAD
                     System.out.println(System.getProperty("user.dir"));
                     Image banner = new Image(new FileInputStream(System.getProperty("user.dir") + "\\Spotify_Logo_RGB_Green.png"), 400,120,false,false);
+=======
+>>>>>>> alex
                     ImageView imageView = new ImageView(banner);
 
                     Text title = new Text("What's your mood? (0: sad, 1: happy)");
@@ -378,14 +388,27 @@ public class UI extends Application {
         GridPane grid = new GridPane();
         Text scenetitle = new Text("Welcome to Spotify Playlist");
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        grid.add(scenetitle, 0, 0, 2, 1);
+
+        ImageView imView = new ImageView(banner);
+        GridPane.setHalignment(imView, HPos.CENTER);
+        grid.add(imView,0,0);
+
+        GridPane.setHalignment(scenetitle, HPos.CENTER);
+        grid.add(scenetitle, 0, 1, 2, 1);
+
         grid.setAlignment(Pos.CENTER);
+
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
-        grid.add(urlLabel,0,1);
-        grid.add(textField,0,2);
-        grid.add(submitBtn,0,3);
+
+        GridPane.setHalignment(urlLabel,HPos.CENTER);
+        GridPane.setHalignment(textField,HPos.CENTER);
+        GridPane.setHalignment(submitBtn,HPos.CENTER);
+
+        grid.add(urlLabel,0,2);
+        grid.add(textField,0,3);
+        grid.add(submitBtn,0,4);
 
         // Set pane to scene, set scene into stage, and show stage
         // Note: stage = window and scene = panel
