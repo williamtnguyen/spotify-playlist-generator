@@ -42,7 +42,8 @@ public class UI extends Application {
         // Initialize instance variables
         primaryStage.setTitle("Authentication");
         submitBtn = new Button("Submit");
-        banner = new Image(new FileInputStream(System.getProperty("user.dir") + "\\logo\\Spotify_Logo_RGB_Green.png"), 400,120,false,false);
+
+        banner = new Image(new FileInputStream(System.getProperty("user.dir") + "/logo/Spotify_Logo_RGB_Green.png"), 400,120,false,false);
         urlLabel = new Label("After agreeing to authorize this app from your main browser, copy and paste the redirect URL into the textbox");
 
         textField = new TextField();
@@ -75,6 +76,7 @@ public class UI extends Application {
                     ImageView imageView = new ImageView(banner);
 
                     Text title = new Text("What's your mood? (0: sad, 1: happy)");
+                    title.setId("welcomeTitle");
                     GridPane grid = new GridPane();
                     Button generatePlaylistBtn = new Button("Generate Mood Playlist");
                     title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
@@ -116,6 +118,7 @@ public class UI extends Application {
 
                     // Create a scene for user to input mood value
                     Scene mainScene = new Scene(root, 720, 350);
+                    mainScene.getStylesheets().add("style.css");
                     primaryStage.setTitle("Set mood");
                     primaryStage.setScene(mainScene);
                     primaryStage.show();
