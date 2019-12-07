@@ -12,9 +12,13 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
+
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
@@ -48,7 +52,7 @@ public class UI extends Application {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Dialog");
             alert.setHeaderText(null);
-            alert.setContentText("An error has occured. Please try again later");
+            alert.setContentText("An error has occurred. Please try again later");
 
             alert.showAndWait();
         }
@@ -60,28 +64,33 @@ public class UI extends Application {
                     programManager.authenticateUser(textField.getText());
 
                     // Create and initialize elements
+                    System.out.println(System.getProperty("user.dir"));
+                    Image banner = new Image(new FileInputStream(System.getProperty("user.dir") + "\\Spotify_Logo_RGB_Green.png"), 400,120,false,false);
+                    ImageView imageView = new ImageView(banner);
+
                     Text title = new Text("What's your mood? (0: sad, 1: happy)");
                     GridPane grid = new GridPane();
-                    Button generatePlaylistBtn = new Button("Generate Playlist");
+                    Button generatePlaylistBtn = new Button("Generate Mood Playlist");
                     title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
-                    Button generateTopListensBtn = new Button("Generate Top Listens");
+                    Button generateTopListensBtn = new Button("Generate Top Listens by Play Count");
 
                     // Create the slider from 0 - 1
                     Slider moodSlider = new Slider();
                     moodSlider.setMin(0);
                     moodSlider.setMax(1);
                     moodSlider.setValue(0.5);
-                    moodSlider.setShowTickLabels(true );
+                    moodSlider.setShowTickLabels(true);
                     moodSlider.setShowTickMarks(true);
                     moodSlider.setMajorTickUnit(0.5);
                     moodSlider.setBlockIncrement(0.1);
 
                     // Add elements into the GridPane layout
-                    grid.add(title, 0, 0, 2, 1);
-                    grid.add(moodSlider,0,1);
-                    grid.add(generatePlaylistBtn,0,2);
-                    grid.add(generateTopListensBtn,0,3);
+                    grid.add(imageView, 0, 0);
+                    grid.add(title, 0, 1, 2, 1);
+                    grid.add(moodSlider,0,2);
+                    grid.add(generatePlaylistBtn,0,3);
+                    grid.add(generateTopListensBtn,0,4);
 
                     StackPane root = new StackPane();
 
@@ -90,6 +99,7 @@ public class UI extends Application {
                     grid.setAlignment(Pos.CENTER);
                     grid.setHgap(10);
                     grid.setVgap(10);
+                    GridPane.setHalignment(imageView,HPos.CENTER);
                     GridPane.setHalignment(title, HPos.CENTER);
                     GridPane.setHalignment(moodSlider, HPos.CENTER);
                     GridPane.setHalignment(generatePlaylistBtn, HPos.CENTER);
