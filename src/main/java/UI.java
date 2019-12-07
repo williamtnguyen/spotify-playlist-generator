@@ -19,10 +19,8 @@ import javafx.scene.text.*;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
-<<<<<<< HEAD
-=======
 import java.io.FileNotFoundException;
->>>>>>> alex
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
@@ -72,11 +70,6 @@ public class UI extends Application {
                     programManager.authenticateUser(textField.getText());
 
                     // Create and initialize elements
-<<<<<<< HEAD
-                    System.out.println(System.getProperty("user.dir"));
-                    Image banner = new Image(new FileInputStream(System.getProperty("user.dir") + "\\Spotify_Logo_RGB_Green.png"), 400,120,false,false);
-=======
->>>>>>> alex
                     ImageView imageView = new ImageView(banner);
 
                     Text title = new Text("What's your mood? (0: sad, 1: happy)");
