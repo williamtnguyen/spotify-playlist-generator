@@ -11,7 +11,7 @@ See the Java wrapper for Spotify API [here](https://github.com/thelinmichael/spo
 
 Here's a walk-through of all functionalities of the application:
 
-<img src='https://i.imgur.com/N3v2rJd.gif' title='Video Walkthrough' width='' alt='Video Walkthrough'/>
+<img src='https://i.imgur.com/82rTO7f.gif' title='Video Walkthrough' width='' alt='Video Walkthrough'/>
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 

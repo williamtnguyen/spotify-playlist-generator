@@ -383,7 +383,7 @@ public class UI extends Application {
 
         // Set layout and elements that will be added to the pane
         GridPane grid = new GridPane();
-        Text scenetitle = new Text("Welcome to Spotify Playlist");
+        Text scenetitle = new Text("Welcome to Spotify Playlist Generator");
 
         // Set css for scene title
         scenetitle.setId("welcomeTitle");

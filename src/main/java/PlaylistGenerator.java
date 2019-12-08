@@ -149,8 +149,8 @@ public class PlaylistGenerator {
         com.wrapper.spotify.model_objects.specification.User user = getCurrentUsersProfile.execute();
         String userID = user.getId();
 
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        String date = dateFormat.format(new Date());
 
         if (selectedSongURIs.size() > 0) {
             Playlist newPlaylist = spotifyApi.createPlaylist(userID, playlistName + ": " + date).build().execute();
