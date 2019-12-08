@@ -3,6 +3,7 @@
 This is a Java application that generates a playlist on your Spotify account based off a mood-index, as well as an option to generate a playlist of tracks with top listens for the year. 
 This project is built with Maven as a project management/comprehension tool, which set up the dependency on an open-source Java wrapper/client for the Spotify API.
 The frontend was built with JavaFX in unison with custom a stylesheet for the components.
+
 See the Java wrapper for Spotify API [here](https://github.com/thelinmichael/spotify-web-api-java).
 
 ## Application Walk-Through
