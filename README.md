@@ -16,9 +16,9 @@ Here's a walk-through of all functionalities of the application:
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 
-## How to run the application:
+## How to Run the Application:
 
-Please note that a the user must have a Spotify premium account.
+Please note that you must have a Spotify premium account.
 
 1. First run the program from UI.java how you would normally run a Java application. *File Path: (../src/main/java/UI.java)*
 
